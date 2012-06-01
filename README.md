@@ -7,11 +7,11 @@ Experimental web applications to browse/sync magento products
 
  clone the git repository
  
-    git clone git@github.com:JumpLink/magento-nodejs-sync-app.git
+    $ git clone git@github.com:JumpLink/magento-nodejs-sync-app.git
     
  change in the new directory
 
-    cd magento-nodejs-sync-app
+    $ cd magento-nodejs-sync-app
     
  install node.js: http://nodejs.org/
  
@@ -19,8 +19,8 @@ Experimental web applications to browse/sync magento products
     
  rename and configure the files in /config
 
-    rm ./config/magento_confs.js.example ./config/magento_confs.js
-    rm ./config/sync_shops.js.example ./config/sync_shops.js
+    $ rm ./config/magento_confs.js.example ./config/magento_confs.js
+    $ rm ./config/sync_shops.js.example ./config/sync_shops.js
     
  install the dependencies locally
 
@@ -28,7 +28,7 @@ Experimental web applications to browse/sync magento products
     
  start the app
     
-    node app.js
+    $ node app.js
     
  start your browser: http://localhost:4242/
  
