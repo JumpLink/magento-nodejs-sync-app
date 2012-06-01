@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1 Category Tree of parent ID 
+    a(href="#{url}/#{categories[0].parent_id}#{shop_param}", target="_top") #{categories[0].parent_id}
+  table.table.table-bordered
+    include category_thead
+    tbody
+      each category, i in categories
+        include category_tbody

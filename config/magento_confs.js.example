@@ -1,0 +1,31 @@
+//Rename this to magento_confs.js
+var confs = [
+  {
+    name: 'My Magento Shop',
+    shop_version: 'Magento 1.5',
+    host: 'www.mymagentohost.com',
+    port: 80,
+    path: '/api/xmlrpc/',
+    login: 'apilogin',
+    pass: 'myapikey'
+  },
+  {
+    name: 'My Magento Shop',
+    shop_version: 'Magento 1.7',
+    host: 'api-xmlrpc.mymagentohost.com',
+    port: 80,
+    path: '/',
+    login: 'apilogin',
+    pass: 'myapikey'
+  },
+  {
+    nname: 'My Magento Shop',
+    shop_version: 'Mage+ 1.0',
+    host: 'api.mymagentohost.com',
+    port: 80,
+    path: '/xmlrpc/',
+    login: 'apilogin',
+    pass: 'myapikey'
+  }
+]
+module.exports = confs;

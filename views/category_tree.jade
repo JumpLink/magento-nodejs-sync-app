@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1 Category Tree of parent ID 
+    a(href="#{url}/#{parentId}#{shop_param}", target="_top") #{parentId}
+  table.table.table-bordered
+    include category_thead
+    tbody
+      category = category_of_parentId
+      i = 0
+      include category_tbody
+  h2 Childrens
+  table.table.table-bordered
+    include category_thead
+    tbody
+      each category, i in category_of_parentId.children
+        include category_tbody

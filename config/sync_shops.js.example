@@ -1,0 +1,15 @@
+//Rename this to sync_shops.js
+var confs = [
+  {
+    name: 'Another Shop',
+    url: 'other',
+    shop_version: 'in-house development',
+    host: 'shop-api.other-shop.com',
+    port: 80,
+    path: '/',
+    login: 'username',
+    pass: 'password'
+  }
+]
+
+module.exports = confs;

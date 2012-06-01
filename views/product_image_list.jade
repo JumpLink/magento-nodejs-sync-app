@@ -1,0 +1,6 @@
+extends layout
+
+block content
+  h1= title
+  each image, i in images
+    img(src="#{image.url}")

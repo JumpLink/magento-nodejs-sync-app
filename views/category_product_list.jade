@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1 Products of category ID #{categoryId}
+  h2 Products
+  table.table.table-bordered
+    include product_thead
+    tbody
+      each product, i in products
+        include product_tbody

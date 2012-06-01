@@ -13,6 +13,8 @@ results
 
 node_modules
 npm-debug.log
+sync.sublime-project
+sync.sublime-workspace
 
 config/magento_confs.js
 config/sync_shops.js

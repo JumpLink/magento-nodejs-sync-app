@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1 Product List
+  table.table.table-bordered
+    thead
+      tr
+        th.sort-header Action
+        include product_thead
+        th.sort-header Category IDs        
+    tbody
+      each product, i in products
+        tr
+          td 
+            .btn-group
+              button.btn.btn-info.dropdown-toggle(data-toggle="dropdown")
+                i.icon-info-sign.icon-white
+                span.caret  
+              ul.dropdown-menu
+                li: a(href="/product/info_with_image/#{product.product_id}#{shop_param}", target="_top") Info with Image
+                li: a(href="/product/info/#{product.product_id}#{shop_param}", target="_top") Info
+                //li: a(href="/product/delete/#{product.product_id}#{shop_param}", target="_top") Delete
+                //li.divider
+                //li: a(href="/product/info_with_image/#{product.product_id}#{shop_param}", target="_top") Update
+          include product_tbody
+          td
+            each category_id in product.category_ids
+              a(href="/category/products/#{category_id}#{shop_param}", target="_top"): #{category_id},

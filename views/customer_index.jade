@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1 What you want to do with the customers?
+  ul
+    li: a(href="/customer/list/", target="_top"): customer.list - Retrieve customers
+    li: a(href="/customer/create/", target="_top"): customer.create - Create a new customer
+    li: a(href="/customer/info/", target="_top"): customer.info - Retrieve a customer’s data
+    li: a(href="/customer/update/", target="_top"): customer.update - Update a customer’s data
+    li: a(href="/customer/delete/", target="_top"): customer.delete - Delete a customer
