@@ -19,8 +19,8 @@ Experimental web applications to browse/sync magento products
     
  rename and configure the files in /config
 
-    $ rm ./config/magento_confs.js.example ./config/magento_confs.js
-    $ rm ./config/sync_shops.js.example ./config/sync_shops.js
+    $ mv ./config/magento_confs.js.example ./config/magento_confs.js
+    $ mv ./config/sync_shops.js.example ./config/sync_shops.js
     
  install the dependencies locally
 
