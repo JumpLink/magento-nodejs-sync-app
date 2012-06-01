@@ -52,7 +52,7 @@ app.get('/'+sync_shops_confs[0].url, sync_shop.index);
 app.get('/'+sync_shops_confs[0].url+'/product', sync_shop.product);
 
 
-http.createServer(app).listen(app.get('port'), function() {
+http.createServer(app).listen(app.get('port'), '127.0.0.1', function() {
   console.log("Express server listening on port " + app.get('port'));
 });
 
