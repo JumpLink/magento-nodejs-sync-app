@@ -13,3 +13,7 @@ results
 
 node_modules
 npm-debug.log
+
+config/magento_confs.js
+config/sync_shops.js
+downloads/
