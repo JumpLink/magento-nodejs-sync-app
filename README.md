@@ -1,7 +1,7 @@
 magento-nodejs-sync-app
 =======================
 
-Experimental web applications to browse/sync magento products
+Experimental web applications to browse/sync magento and other products using Node.js
 
 ## Try it out on Linux
 
