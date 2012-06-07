@@ -4,35 +4,36 @@ html(lang='en')
     title= title
     link(rel='stylesheet', href='/lib/bootstrap/css/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css') 
+    script(src='/javascripts/jquery.min.js')
+    script(src='/dnode.js')
   body
     block content
-  script(src='/javascripts/jquery.min.js')
   script(src='/lib/bootstrap/js/bootstrap.min.js')
   script(src='/javascripts/tablesort.min.js')
-  script(src='/javascripts/urlParam.js')
   script(src='/javascripts/WindowSize.js')
   script(src='/javascripts/getFullSizeOfElement.js')
   script(src='/javascripts/url_funcs.js')
   script(src='/javascripts/filterSubmit.js')
+  script(src='/javascripts/loadContent.js')
   script
-      //This site is an IFrame or not?
-      if ($.urlParam('style') == 'is_iframe') {
-          $(document).ready(function () {
-              //Macht alle Tabellen im iframe sortierbar
-              $('table').each(function() {
-                  new Tablesort($(this).get(0));
-              });
-          });
-      } else {
-          $(document).ready(function () {
-              //iframe aus parent heraus ansteuern
-              $('iframe#owniframe').load(function () {
-                  //Setzt die iframebreite genau nach dem noch passenden Platz
-                  //var iframe_width = getWindowWidth() - getTotalWidth($('.menu')) - 15;
-                  //$('.iframediv').width(iframe_width);
-                  //Setzt das div, welches das iframe beinhaltet nach der gleichen groeße wie dessen inhalt + 100px
-                  var iframe_height = $('iframe#owniframe').contents().find('html').height() + 100;
-                  $('.span10').height(iframe_height);
-              });
-          });        
-      }
+    //This site is an IFrame or not?
+    if (urlParam('style') == 'is_iframe') {
+      $(document).ready(function () {
+        //Macht alle Tabellen im iframe sortierbar
+        $('table').each(function() {
+            new Tablesort($(this).get(0));
+        });
+      });
+    } else {
+      $(document).ready(function () {
+        //iframe aus parent heraus ansteuern
+        $('iframe#owniframe').load(function () {
+          //Setzt die iframebreite genau nach dem noch passenden Platz
+          //var iframe_width = getWindowWidth() - getTotalWidth($('.menu')) - 15;
+          //$('.iframediv').width(iframe_width);
+          //Setzt das div, welches das iframe beinhaltet nach der gleichen groeße wie dessen inhalt + 100px
+          var iframe_height = $('iframe#owniframe').contents().find('html').height() + 100;
+          $('.span10').height(iframe_height);
+        });
+      });
+    }

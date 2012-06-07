@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  include alert-dev
+  //Layout nach http://twitter.github.com/bootstrap/scaffolding.html#layouts
+  .container-fluid
+    .row-fluid
+      .span2
+        include menu
+      .span10
+        block container
+  #productDeleteModal.modal.hide.fade(style="display: none; ")
+    .modal-header
+      button(type="button", class="close", data-dismiss="modal"): | ×
+      h3: | Warning!
+    .modal-body
+      h4: | Delete Product
+      p: | Are you sure that you want to delete this product?
+    .modal-footer
+      a.btn(href="#", data-dismiss="modal"): | Abort
+      a.btn.btn-primary(href="#"): | Yes

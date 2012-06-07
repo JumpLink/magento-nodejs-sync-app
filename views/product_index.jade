@@ -1,17 +1,18 @@
-extends layout
+extends content_with_menu
 
-block content
+block container
   .page-header
     h1 Retrieve products list
   form.form-horizontal(target="_parent", name='general')
       .control-group
         label.control-label: | Shop Version
         .controls
-          select.span3
+          select
             each magento_conf, i in magento_confs
               option(name="#{i}"): #{magento_conf.name} #{magento_conf.shop_version}
   .form-actions
     button.btn.btn-primary(type="button", onClick="javascript:productShopSubmitOnClick($('select option:selected').attr('name'))") List all products
+    //button.btn.btn-primary(type="button", onClick="javascript:loadProductOnClick(null, null, $('select option:selected').attr('name'))") List all products DNode
   h2 By filter
   form.form-horizontal(target="_parent", name='filterForm')
     fileset
@@ -38,5 +39,6 @@ block content
             span.muted Category ID
   .form-actions
     .input-append
-      input.span2(id="appendedInputButton", size="16", type="text")
-      button.btn.btn-success(type="button", placeholder="Value to filter", onClick="javascript:productFilterSubmitOnClick($('input:radio[name=FilterTyp]:checked').val(), $('select option:selected').attr('name') , $('#appendedInputButton').val())") Use!
+      input(id="appendedInputButton", size="16", type="text")
+      button.btn.btn-success(type="button", placeholder="Value to filter", onClick="javascript:productFilterSubmitOnClick($('input:radio[name=FilterTyp]:checked').val(), $('select option:selected').attr('name'), $('#appendedInputButton').val())") Use!
+      //button.btn.btn-success(type="button", placeholder="Value to filter", onClick="javascript:loadProductOnClick($('input:radio[name=FilterTyp]:checked').val(), $('#appendedInputButton').val(), $('select option:selected').attr('name'))") Use! DNode

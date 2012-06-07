@@ -1,0 +1,9 @@
+extends content_with_menu
+
+block container
+  include loading
+  script
+    // load the content if the site is loaded
+    $(document).ready(function () {
+      loadProductInfo(null,null,0);
+    });

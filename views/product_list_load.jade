@@ -1,0 +1,12 @@
+extends content_with_menu
+
+block container
+  include loading
+  script
+    // load the productlist if the site is loaded
+    $(document).ready(function () {
+      //console.log("#{filter_type}");
+      //console.log("#{filter_value}");
+      //console.log("#{filter_shop}");
+      loadProducts("#{filter_type}", "#{filter_value}", "#{filter_shop}");
+    });

@@ -8,6 +8,7 @@
   "dependencies": {
     "express": "3.0",
     "jade": "latest",
-    "xmlrpc": "latest"
+    "xmlrpc": "latest",
+    "dnode": "latest"
   }
 }
