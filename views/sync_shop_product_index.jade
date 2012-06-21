@@ -1,0 +1,42 @@
+extends content_with_menu
+
+block container
+  .page-header
+    h1 Retrieve products list
+  form.form-horizontal(target="_parent", name='general')
+      .control-group
+        label.control-label: | Shop Version
+        .controls
+          select
+            each sync_shops_conf, i in sync_shops_confs
+              option(name="#{i}"): #{sync_shops_conf.name} #{sync_shops_conf.shop_version}
+  .form-actions
+    button.btn.btn-primary.disabled(type="button", onClick="javascript:syncProductShopSubmitOnClick($('select option:selected').attr('name'))") List all products
+  h2 By filter
+  form.form-horizontal(target="_parent", name='filterForm')
+    fileset
+      .control-group
+        label.control-label: | Choose simple filter
+        .controls
+          label.radio
+            input(type='radio', name='FilterTyp', value='Name', id='#RadioName', disabled)
+            span.muted Name
+          label.radio
+            input(type='radio', name='FilterTyp', value='Product', id='#RadioProduct', disabled)
+            span.muted Product ID
+          label.radio
+            input(type='radio', name='FilterTyp', value='SKU', id='#RadioSKU', checked='')
+            | SKU
+          label.radio
+            input(type='radio', name='FilterTyp', value='Set', id='#RadioSet', disabled)
+            span.muted Set
+          label.radio
+            input(type='radio', name='FilterTyp', value='Type', id='#RadioType', disabled)
+            span.muted Type
+          label.radio
+            input(type='radio', name='FilterTyp', value='Category', id='#RadioCategory', disabled)
+            span.muted Category ID
+  .form-actions
+    .input-append
+      input(id="appendedInputButton", size="16", type="text")
+      button.btn.btn-success(type="button", placeholder="Value to filter", onClick="javascript:syncProductFilterSubmitOnClick($('input:radio[name=FilterTyp]:checked').val(), $('select option:selected').attr('name'), $('#appendedInputButton').val(), '#{url}') ") Use!

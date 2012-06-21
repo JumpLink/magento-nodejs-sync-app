@@ -108,11 +108,38 @@ function productFilterSubmitOnClick(rValue, sValue, iValue) {
   console.log('URL: ' + url);
     parent.location = url;
 }
+function syncProductFilterSubmitOnClick(rValue, sValue, iValue, url) {
+  console.log(url);
+  iValue = encodeURIComponent(iValue);
+  url += '/product/';
+  switch (rValue) {
+    case 'Name':
+      url = setNameUrl(url + 'list', iValue);
+      break;
+    case 'Product':
+      url = url + 'product_id/' + iValue;
+      break;
+    case 'SKU':
+      url = setSKUUrl(url + 'list', iValue);
+      break;
+    case 'Set':
+      url = url + 'set/' + iValue;
+      break;
+    case 'Type':
+      url = url + 'type/' + iValue;
+      break;
+    case 'Category': //TODO
+      url = url + 'category_id/' + iValue;
+      break;
+  }
+  // if(sValue)
+  //   url = setShopUrl(url, sValue);
+  parent.location = url;
+}
 /* Funktion wird ausgeführt bei Click auf ProductButton */
 function productShopSubmitOnClick(sValue) {
   parent.location = setShopUrl('/product/list', sValue);
 }
-
 /* Funktionen werden ausgeführt bei Click auf CategoryButton */
 function CategoryLevelSubmitOnClick(shop, input) {
   var url = '/category/level/' + input;
@@ -126,7 +153,6 @@ function CategoryProductsSubmitOnClick(shop, input){
   var url = '/category/products/' + input;;
   parent.location = setShopUrl(url, shop);
 }
-
 /* on client */
 if(typeof exports == 'undefined'){
   //nothing
@@ -137,4 +163,5 @@ if(typeof exports == 'undefined'){
   module.exports.setShopUrl = setShopUrl;
   module.exports.has_param = has_param;
   module.exports.getURLShop = getURLShop;
+  module.exports.setParameterUrl = setParameterUrl;
 }

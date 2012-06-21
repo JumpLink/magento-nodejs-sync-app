@@ -1,6 +1,8 @@
+// sublime: tab_size 2; translate_tabs_to_spaces true
 var magento = require('../magento_funcs');
 var url = require('../public/javascripts/url_funcs.js');
 var magento_confs = require('../config/magento_confs.js');
+var sync_shops_confs = require('../config/sync_shops.js');
 
 exports.list_iframe = function(req, res){
 	var magento_conf = url.getURLShop(req, magento);
@@ -36,7 +38,7 @@ exports.list_iframe = function(req, res){
 	/* Magentofuntion zum rendern der Seite mit Filter und magento config */
     magento.catalog.product.list(filter, storeView, magento_conf, function(error, result) {
     	var shop_param = url.setShopUrl('', req.query['shop']);
-    	res.render('product_list', { title: 'Product List', url: "/product", products: result, shop_param: shop_param});
+    	res.render('product_list', { title: 'Product List', url: "/product", products: result, shop_param: shop_param, sync_shop: sync_shops_confs[0]});
     });
 };
 
@@ -84,7 +86,7 @@ exports.list = function(req, res){
         value = decodeURIComponent(req.query['sku'])
         type = 'SKU';
     }
-    res.render('product_list_load', {title: 'Bugwelder Sync' , magento_confs: magento.confs, magento_shop: magento_confs[0], filter_type: type, filter_value: value, filter_shop: shop});
+    res.render('product_list_load', {title: 'Bugwelder Sync' , magento_confs: magento.confs, magento_shop: magento_confs[0], filter_type: type, filter_value: value, filter_shop: shop, sync_shop: sync_shops_confs[0]});
 };
 
 // exports.list_load = function(req, res){
@@ -93,7 +95,7 @@ exports.list = function(req, res){
 
 
 exports.index = function(req, res){
-    res.render('product_index', {title: 'Bugwelder Sync' , magento_confs: magento.confs, magento_shop: magento_confs[0]});
+    res.render('product_index', {title: 'Bugwelder Sync' , magento_confs: magento.confs, magento_shop: magento_confs[0], sync_shop: sync_shops_confs[0]});
 };
 
 exports.info_and_image = function(req, res){
@@ -110,7 +112,7 @@ exports.info_and_image = function(req, res){
     	}
     	console.log(result_atributes);
     	console.log(result_image);
-		res.render('product_atributes_image', { title: 'Product Info', url: "product/info_with_image/", atribute_values: result_atributes, atribute_names: atribute_names, images: result_image, shop_param: shop_param });
+		res.render('product_atributes_image', { title: 'Product Info', url: "product/info_with_image/", atribute_values: result_atributes, atribute_names: atribute_names, images: result_image, shop_param: shop_param, sync_shop: sync_shops_confs[0] });
 	}
 
     magento.catalog.product.info_and_image(req.params.product_id, storeView, magento_conf, render);
@@ -142,7 +144,7 @@ exports.info = function(req, res){
     		atribute_names[i] = x;
     		i++;
     	}
-    	res.render('product_atributes', { title: 'Product Info', url: "/product/info/", atribute_values: result, atribute_names: atribute_names, shop_param: shop_param });
+    	res.render('product_atributes', { title: 'Product Info', url: "/product/info/", atribute_values: result, atribute_names: atribute_names, shop_param: shop_param, sync_shop: sync_shops_confs[0] });
     });
 };
 

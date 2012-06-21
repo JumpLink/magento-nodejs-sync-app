@@ -1,4 +1,4 @@
-
+// sublime: tab_size 2; translate_tabs_to_spaces true
 /**
  * Module dependencies.
  */
@@ -42,6 +42,9 @@ app.get('/product/sku/:sku', product.list);
 app.get('/product/product_id/:product_id', product.list);
 app.get('/product/set/:set', product.list);
 app.get('/product/type/:type', product.list);
+app.get('/'+sync_shops_confs[0].url, sync_shop.index);
+app.get('/'+sync_shops_confs[0].url+'/product', sync_shop.product.info);
+app.get('/'+sync_shops_confs[0].url+'/product/list', sync_shop.product.info);
 
 // catches the sites they need a style=is_iframe prameter 
 app.get('^\/$|^\/category*$|^\/customer*$|^\/product/*$|^\/'+sync_shops_confs[0].url+'*$', routes.iframe);
@@ -59,9 +62,6 @@ app.get('/product/info/:product_id', product.info);
 app.get('/product/info_with_image/:product_id', product.info_and_image);
 app.get('/product/image/:product_id', product.image);
 app.get('/product/info/image/:product_id', product.image_info);
-app.get('/'+sync_shops_confs[0].url, sync_shop.index);
-app.get('/'+sync_shops_confs[0].url+'/product', sync_shop.product);
-
 
 var http_server = http.createServer(app);
 
