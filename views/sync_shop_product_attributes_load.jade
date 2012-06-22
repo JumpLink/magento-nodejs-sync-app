@@ -1,0 +1,10 @@
+extends content_with_menu
+
+block container
+  include loading
+  script
+    // load the productlist if the site is loaded
+    $(document).ready(function () {
+      console.log("#{get_product_url}");
+      loadSyncShopProductAttributes("#{get_product_url}");
+    });

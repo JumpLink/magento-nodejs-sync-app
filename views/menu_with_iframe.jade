@@ -1,3 +1,4 @@
+// sublime: tab_size 2; translate_tabs_to_spaces true
 extends layout
 
 block content
@@ -6,46 +7,5 @@ block content
   .container-fluid
     .row-fluid
       .span2
-        .well(style="padding: 8px 0;")
-          ul.nav.nav-list
-            li.active
-              a(href="/")
-                i.icon-star.icon-white
-                #{magento_shop.name}
-            li
-              a(href="/product")
-                i.icon-tag
-                | Product
-            li
-              a(href="/category")
-                i.icon-book
-                | Category
-            //  li
-            //   a(href="/customer")
-            //     i.icon-user
-            //     | Customer
-            // li
-            //   a(href="/country")
-            //     i.icon-flag
-            //     | Country
-            // li
-            //   a(href="/region")
-            //     i.icon-road
-            //     | Region
-            // li
-            //   a(href="/order")
-            //     i.icon-barcode
-            //     | Order
-            // li
-            //   a(href="/shipment")
-            //     i.icon-envelope
-            //     | shipment
-            // li.active
-            //   a(href="/#{sync_shop.url}")
-            //     i.icon-star.icon-white
-            //     #{sync_shop.name}
-            // li
-            //   a(href="/#{sync_shop.url}/product")
-            //     i.icon-tag
-            //     | Product
+        include menu
       .span10

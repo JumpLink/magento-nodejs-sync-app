@@ -4,6 +4,14 @@ var url = require('../public/javascripts/url_funcs.js');
 var magento_confs = require('../config/magento_confs.js');
 var sync_shops_confs = require('../config/sync_shops.js');
 
+var render_parameters = { 
+  title: 'Bugwelder Sync'
+  , url: '' 
+  , sync_shop: sync_shops_confs[0]
+  , magento_confs: magento_confs
+  , magento_shop: magento_confs[0]
+}
+
 exports.list_iframe = function(req, res){
 	var magento_conf = url.getURLShop(req, magento);
 	var storeView = null;
@@ -37,8 +45,10 @@ exports.list_iframe = function(req, res){
 
 	/* Magentofuntion zum rendern der Seite mit Filter und magento config */
     magento.catalog.product.list(filter, storeView, magento_conf, function(error, result) {
-    	var shop_param = url.setShopUrl('', req.query['shop']);
-    	res.render('product_list', { title: 'Product List', url: "/product", products: result, shop_param: shop_param, sync_shop: sync_shops_confs[0]});
+      var parameters = render_parameters;
+      if (req.query['shop'] != null)
+        parameters.shop_param = url.setShopUrl('', req.query['shop']);
+    	res.render('product_list', parameters);
     });
 };
 
@@ -86,48 +96,47 @@ exports.list = function(req, res){
         value = decodeURIComponent(req.query['sku'])
         type = 'SKU';
     }
-    res.render('product_list_load', {title: 'Bugwelder Sync' , magento_confs: magento.confs, magento_shop: magento_confs[0], filter_type: type, filter_value: value, filter_shop: shop, sync_shop: sync_shops_confs[0]});
-};
+    var parameters = render_parameters;
+    parameters.filter_type = type;
+    parameters.filter_value = value;
+    parameters.filter_shop = shop;
+    if (req.query['shop'] != null)
+      parameters.shop_param = url.setShopUrl('', req.query['shop']);
 
-// exports.list_load = function(req, res){
-//     res.render('product_list_load', {title: 'Bugwelder Sync' , magento_confs: magento.confs, magento_shop: magento_confs[0]});
-// };
+    res.render('product_list_load', parameters );
+};
 
 
 exports.index = function(req, res){
-    res.render('product_index', {title: 'Bugwelder Sync' , magento_confs: magento.confs, magento_shop: magento_confs[0], sync_shop: sync_shops_confs[0]});
+    res.render('product_index', render_parameters );
 };
 
 exports.info_and_image = function(req, res){
 	var magento_conf = url.getURLShop(req, magento);
 	var storeView = null;
-	var shop_param = url.setShopUrl('', req.query['shop']);
 
-	function render(result_atributes, result_image) {
+	function render(result_attributes, result_image) {
 		var i = 0;
-    	var atribute_names = new Array();
-    	for (x in result_atributes) {
-    		atribute_names[i] = x;
+    	var attribute_names = new Array();
+    	for (x in result_attributes) {
+    		attribute_names[i] = x;
     		i++;
     	}
-    	console.log(result_atributes);
+    	console.log(result_attributes);
     	console.log(result_image);
-		res.render('product_atributes_image', { title: 'Product Info', url: "product/info_with_image/", atribute_values: result_atributes, atribute_names: atribute_names, images: result_image, shop_param: shop_param, sync_shop: sync_shops_confs[0] });
+    var parameter = render_parameters;
+    parameter.title = 'Product Info';
+    parameter.url = "product/info_with_image/";
+    parameter.attribute_values = result_attributes;
+    parameter.attribute_names = attribute_names;
+    parameter.images = result_image;
+    if (req.query['shop'] != null)
+      parameter.shop_param = url.setShopUrl('', req.query['shop']);
+
+		res.render('product_attributes_image', parameter );
 	}
 
     magento.catalog.product.info_and_image(req.params.product_id, storeView, magento_conf, render);
-    //  {
-    // 	if (error) { throw error; }
-    // 	var shop_param = url.setShopUrl('', req.query['shop']);
-    // 	//console.log(result);
-    // 	var i = 0;
-    // 	var atribute_names = new Array();
-    // 	for (x in result) {
-    // 		atribute_names[i] = x;
-    // 		i++;
-    // 	}
-    // 	
-    // });
 };
 
 exports.info = function(req, res){
@@ -136,26 +145,41 @@ exports.info = function(req, res){
 
     magento.catalog.product.info(req.params.product_id, storeView, magento_conf, function(error, result) {
     	if (error) { throw error; }
-    	var shop_param = url.setShopUrl('', req.query['shop']);
     	//console.log(result);
     	var i = 0;
-    	var atribute_names = new Array();
+    	var attribute_names = new Array();
     	for (x in result) {
-    		atribute_names[i] = x;
+    		attribute_names[i] = x;
     		i++;
     	}
-    	res.render('product_atributes', { title: 'Product Info', url: "/product/info/", atribute_values: result, atribute_names: atribute_names, shop_param: shop_param, sync_shop: sync_shops_confs[0] });
+
+      var parameter = render_parameters;
+      parameter.title = 'Product Info';
+      parameter.url = "/product/info/";
+      parameter.attribute_values = result;
+      parameter.attribute_names = attribute_names;
+      parameter.sync_shop = sync_shops_confs[0];
+      if (req.query['shop'] != null)
+        parameter.shop_param = url.setShopUrl('', req.query['shop']);
+
+    	res.render('product_attributes', parameter);
     });
 };
-
 
 exports.image_info = function(req, res){
 	var magento_conf = url.getURLShop(req, magento);
 	var storeView = null;
 
     magento.catalog.product.attribute.media.info(req.params.product_id, storeView, magento_conf, function(error, result) {
-    	var shop_param = url.setShopUrl('', req.query['shop']);
-    	res.render('product_image_info', { title: 'Product Image Info', url: "/product/info/image/", images: result, shop_param: shop_param });
+
+      var parameter = render_parameters;
+      parameter.title = 'Product Image Info';
+      parameter.url = "/product/info/image/";
+      parameter.images = result;
+      if (req.query['shop'] != null)
+        parameter.shop_param = url.setShopUrl('', req.query['shop']);
+
+    	res.render('product_image_info', parameter);
     });
 };
 
@@ -166,7 +190,12 @@ exports.delete = function(req, res){
     //     var shop_param = url.setShopUrl('', req.query['shop']);
     //     res.render('product_delete', { title: 'Product Delete', url: "/product/delete/", product: result, shop_param: shop_param });
     // });
-    res.render('product_delete', {title: 'Product Delete' , magento_conf: magento.conf});
+    var parameter = render_parameters;
+    parameter.title = 'Product Delete';
+    if (req.query['shop'] != null)
+      parameter.shop_param = url.setShopUrl('', req.query['shop']);
+
+    res.render('product_delete', parameter);
 };
 
 exports.image = function(req, res){
@@ -174,7 +203,14 @@ exports.image = function(req, res){
 	var storeView = null;
 
     magento.catalog.product.attribute.media.list(req.params.product_id, storeView, magento_conf, function(error, result) {
-    	var shop_param = url.setShopUrl('', req.query['shop']);
-    	res.render('product_image_list', { title: 'Product Image', url: "/product/image/", images: result, shop_param: shop_param });
+
+      var parameter = render_parameters;
+      parameter.title = 'Product Image';
+      parameter.url = "/product/image/";
+      parameter.images = result;
+      if (req.query['shop'] != null)
+        parameter.shop_param = url.setShopUrl('', req.query['shop']);
+
+    	res.render('product_image_list', parameter);
     });
 };

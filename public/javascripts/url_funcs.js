@@ -111,7 +111,7 @@ function productFilterSubmitOnClick(rValue, sValue, iValue) {
 function syncProductFilterSubmitOnClick(rValue, sValue, iValue, url) {
   console.log(url);
   iValue = encodeURIComponent(iValue);
-  url += '/product/';
+  //url += '/product/';
   switch (rValue) {
     case 'Name':
       url = setNameUrl(url + 'list', iValue);

@@ -9,6 +9,7 @@ var express = require('express')
   , customer = require('./routes/customer')
   , product = require('./routes/product')
   , sync_shop = require('./routes/sync_shop')
+  , error = require('./routes/error')
   , http = require('http')
   , sync_shops_confs = require('./config/sync_shops.js');
 
@@ -44,7 +45,8 @@ app.get('/product/set/:set', product.list);
 app.get('/product/type/:type', product.list);
 app.get('/'+sync_shops_confs[0].url, sync_shop.index);
 app.get('/'+sync_shops_confs[0].url+'/product', sync_shop.product.info);
-app.get('/'+sync_shops_confs[0].url+'/product/list', sync_shop.product.info);
+//app.get('/'+sync_shops_confs[0].url+'/product/list', sync_shop.product.info);
+app.get('/'+sync_shops_confs[0].url+'/product/list', sync_shop.product.info_load);
 
 // catches the sites they need a style=is_iframe prameter 
 app.get('^\/$|^\/category*$|^\/customer*$|^\/product/*$|^\/'+sync_shops_confs[0].url+'*$', routes.iframe);
@@ -71,6 +73,29 @@ var dnode = require('dnode');
 var magento = require('./magento_funcs');
 var magento_confs = require('./config/magento_confs.js');
 var url = require('./public/javascripts/url_funcs.js');
+
+
+function sync_product_info (get_product_url, cb) {
+  //console.log('dnode get_product_url:' + get_product_url);
+  var sync_shop = require('./sync_shop_funcs.js');
+  sync_shop.get_products(get_product_url, function(data){
+    if(typeof data != undefined)
+      sync_shop.set_render_parameter(data, function(parameter){
+        if (data.ROWCOUNT>0)
+          app.render('product_attributes', parameter, function(err, html){
+            cb(html);
+          });
+        else
+          app.render('no_product', parameter, function(err, html){
+            cb(html);
+          });
+      });
+    else
+      app.render('408', render_parameter, function(err, html){
+        cb(html);
+      });
+  });
+};
 
 dnode_server = dnode({
     index: function (cb) {
@@ -116,7 +141,13 @@ dnode_server = dnode({
         console.log(html);
         cb(html);
       });
-    }
+    },
+    sync_product_info: sync_product_info,
+    sync_product_info_by_sku: function (sku, cb) {
+      var sync_shop = require('./sync_shop_funcs.js');
+      var get_product_url = sync_shop.parse_info_filter(sku, null);
+      sync_product_info(get_product_url, cb);
+    },
 });
 
 dnode_server.listen(http_server);

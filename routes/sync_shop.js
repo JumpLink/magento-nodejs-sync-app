@@ -5,31 +5,16 @@ var magento = require('../magento_funcs');
 var fs = require('fs');
 var sync_shops_confs = require('../config/sync_shops.js');
 //var get = require('get');
-var fetchUrl = require("fetch").fetchUrl;
+
 //var jsdom = require("jsdom");
+var sync_shop = require('../sync_shop_funcs.js');
 
 var product = {};
-var render_parameter = {
-    title: sync_shops_confs[0].name + ' Sync'
-  , sync_shops_confs: sync_shops_confs
-  , magento_confs: magento.confs
-  , magento_shop: magento.confs[0]
-  , sync_shop: sync_shops_confs[0]
-  , url: '/' + sync_shops_confs[0].url
-};
+var error = {};
+var render_parameter = sync_shop.render_parameter;
 
-function get_json(uri, cb) {
-  // get(uri).asString(function(err, data) {
-  //   if (err) throw err;
-  //   parse_html(data)
-  // });
-  fetchUrl(uri, function(error, meta, body){
-      //console.log(body.toString());
-      //if(body) {
-        var data = JSON.parse(body.toString());
-        cb(data);
-      //} //TODO body == undefined
-  });
+error.e408 = function (req, res) {
+  res.render('408', render_parameter);
 }
 
 function index(req, res) {
@@ -39,49 +24,42 @@ function index(req, res) {
 product.index = function(req, res) {
   res.render('sync_shop_product_index', render_parameter);
 };
+
 //ladet die Seite sobald sie erhältlich ist
 product.info = function(req, res) {
-  //download.wget(file_uri, './downloads/+sync_shops_confs[0].url+'/product');
   if (req.query['sku']) {
-    value = decodeURIComponent(req.query['sku'])
-    var url_string = sync_shops_confs[0].host + sync_shops_confs[0].path;
-    url_string = url.setParameterUrl(url_string, sync_shops_confs[0].sku_var_name, value);
-    url_string = url.setParameterUrl(url_string, sync_shops_confs[0].login, sync_shops_confs[0].pass);
-    console.log('url_string: ' + url_string);
-
-    //var product = JSON.parse(get(url_string));
-    get_json(url_string, function(data) {
-      //console.log(data);
-      var parameter = render_parameter;
-      parameter.url = "/"+sync_shops_confs[0].url+"/product/";
-      parameter.attribute_values = data.DATA;
-      parameter.attribute_names = data.COLUMNS;
-      parameter.shop_param = '';
-      res.render('product_attributes', parameter);
+    var type = 'SKU';
+    sync_shop.parse_info_filter(req.query['sku'], function(url_string){
+      sync_shop.get_products(url_string, function(data){
+        sync_shop.set_render_parameter(data, function(parameter){
+          if (data.ROWCOUNT>0)
+            res.render('product_attributes', parameter);
+          else
+            res.render('no_product_with_menu', parameter);
+        });
+      });
     });
-
-    //console.log(product);
-    //index(req, res);
-    //
-  }
-  else {
-    console.log('keine sku angegeben!');
+  } else {
+    console.log('no sku given!');
     product.index(req, res);
   }
 };
 //ladet die infos mittels dnode nach sobald sie erhältlich sind, zeigt solange ein loader an
 product.info_load = function(req, res) {
-  if (req.params.sku != null) {
-      res.render('product_attributes_load', { title: sync_shops_confs[0].name, url: "/"+sync_shops_confs[0].url+"/product/", atribute_values: data.DATA, atribute_names: data.COLUMNS, shop_param: '' });
-  }
-  else {
-    console.log('keine sku angegeben!');
-    index(req, res);
+  if (req.query['sku']) {
+    var type = 'SKU';
+    sync_shop.parse_info_filter(req.query['sku'], function(url_string){
+      var parameter = render_parameter;
+          parameter.url = "/"+sync_shops_confs[0].url+"/product/";
+          parameter.get_product_url = url_string; 
+      res.render('sync_shop_product_attributes_load', parameter);
+    });
+  } else {
+    console.log('no sku given!');
+    product.index(req, res);
   }
 };
 
-
-
-
 exports.product = product;
 exports.index = index;
+

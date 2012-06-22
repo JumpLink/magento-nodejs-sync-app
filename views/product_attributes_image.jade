@@ -1,12 +1,22 @@
-// sublime: tab_size 2; translate_tabs_to_spaces true
-extends content_with_menu
+//sublime: tab_size 2; translate_tabs_to_spaces true
+extends layout
 
-block container
+block content
   h1= title
-  dl.dl-horizontal
-    each attribute_name, i in attribute_names
-      dt #{attribute_name}
-      dd!= attribute_values[attribute_name]
-        &nbsp
-  each image, i in images
-    img(src="#{image.url}")
+  .span5
+    dl.dl-horizontal
+      each attribute_name, i in attribute_names
+        dt #{attribute_name}
+        dd!= attribute_values[attribute_name]
+          &nbsp
+    each image, i in images
+      img(src="#{image.url}")
+  .span5#sync
+    include loading
+  script
+    $(document).ready(function () {
+      loadSyncShopProductAttributesBySKU('#{attribute_values['sku']}', function (html) {
+        $('#sync').html(html);
+      });
+    });
+    

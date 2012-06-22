@@ -1,3 +1,4 @@
+// sublime: tab_size 2; translate_tabs_to_spaces true
 function loadStatic(content) {
 	switch (content) {
 	case 'index':
@@ -32,19 +33,22 @@ function loadStatic(content) {
 }
 
 function loadProducts(filter_type, input, shop) {
-	// console.log('Radio Wert: ' + filter_type);
-	// console.log('Select Wert: ' + shop);
-	// console.log('Input Wert: ' + input);
-	// DNode.connect(function (remote) {
-	// 	remote.loading(function (html) {
-	// 		$('.span10').html(html);
-	// 	});
-	// });
-
 	DNode.connect(function (remote) {
 		remote.product_list(filter_type, input, shop, function (html) {
 			$('.span10').html(html);
 		});
 	});
 
+}
+function loadSyncShopProductAttributes(get_product_url) {
+  DNode.connect(function (remote) {
+    remote.sync_product_info(get_product_url, function (html) {
+      $('.span10').html(html);
+    });
+  });
+}
+function loadSyncShopProductAttributesBySKU(sku, cb) {
+  DNode.connect(function (remote) {
+    remote.sync_product_info_by_sku(sku, cb);
+  });
 }
