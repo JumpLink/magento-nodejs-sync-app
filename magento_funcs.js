@@ -100,23 +100,23 @@ catalog = {
 
     },
     /* http://www.magentocommerce.com/wiki/doc/webservices-api/api/catalog_product#catalog_product.info */
-    info: function(product_id, storeView, conf, cb) {
+    info: function(product_id_or_sku, storeView, conf, cb) {
       var magento = require('./magento')(conf);
       var util = require('util');
 
       magento.init(function(err) {
-        magento.catalog_product.info(product_id, storeView, cb);
+        magento.catalog_product.info(product_id_or_sku, storeView, cb);
       });
 
     },
-    info_and_image: function(product_id, storeView, conf, cb_render) {
+    info_and_image: function(product_id_or_sku, storeView, conf, cb_render) {
       var magento = require('./magento')(conf);
       var util = require('util');
 
       magento.init(function(err) {
-        magento.catalog_product.info(product_id, storeView, function(error, result_atributes) {
+        magento.catalog_product.info(product_id_or_sku, storeView, function(error, result_atributes) {
           if (error) { throw error; }
-          magento.catalog_product_attribute_media.list(product_id, storeView, function(error, result_image) {
+          magento.catalog_product_attribute_media.list(product_id_or_sku, storeView, function(error, result_image) {
             if (error) { throw error; }
             cb_render(result_atributes, result_image);
           });

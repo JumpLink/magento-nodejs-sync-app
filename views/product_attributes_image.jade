@@ -11,12 +11,4 @@ block content
           &nbsp
     each image, i in images
       img(src="#{image.url}")
-  .span5#sync
-    include loading
-  script
-    $(document).ready(function () {
-      loadSyncShopProductAttributesBySKU('#{attribute_values['sku']}', function (html) {
-        $('#sync').html(html);
-      });
-    });
     

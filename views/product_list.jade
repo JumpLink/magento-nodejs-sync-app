@@ -14,6 +14,7 @@ table.table.table-bordered
               i.icon-info-sign.icon-white
               span.caret  
             ul.dropdown-menu
+              li: a(href="/product/info_compare#{shop_param}&sku=#{product.sku}", target="_top") Info with compare
               li: a(href="/product/info_with_image/#{product.product_id}#{shop_param}", target="_top") Info with Image
               li: a(href="/product/info/#{product.product_id}#{shop_param}", target="_top") Info
               li.divider

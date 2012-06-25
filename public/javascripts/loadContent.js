@@ -33,13 +33,18 @@ function loadStatic(content) {
 }
 
 function loadProducts(filter_type, input, shop) {
-	DNode.connect(function (remote) {
-		remote.product_list(filter_type, input, shop, function (html) {
-			$('.span10').html(html);
-		});
-	});
-
+  DNode.connect(function (remote) {
+    remote.product_list(filter_type, input, shop, function (html) {
+      $('.span10').html(html);
+    });
+  });
 }
+function loadMagentoShopProductAttributes(id_or_sku, shop, cb) {
+  DNode.connect(function (remote) {
+    remote.magento_product_info(id_or_sku, shop, cb);
+  });
+}
+
 function loadSyncShopProductAttributes(get_product_url) {
   DNode.connect(function (remote) {
     remote.sync_product_info(get_product_url, function (html) {

@@ -43,6 +43,7 @@ app.get('/product/sku/:sku', product.list);
 app.get('/product/product_id/:product_id', product.list);
 app.get('/product/set/:set', product.list);
 app.get('/product/type/:type', product.list);
+app.get('/product/info_compare', product.info_compare);
 app.get('/'+sync_shops_confs[0].url, sync_shop.index);
 app.get('/'+sync_shops_confs[0].url+'/product', sync_shop.product.info);
 //app.get('/'+sync_shops_confs[0].url+'/product/list', sync_shop.product.info);
@@ -135,6 +136,9 @@ dnode_server = dnode({
           });
       });
     },
+    product_info: function () {
+
+    },
     loading: function (cb) {
       console.log('loading..');
       app.render('loading', function(err, html){
@@ -148,6 +152,35 @@ dnode_server = dnode({
       var get_product_url = sync_shop.parse_info_filter(sku, null);
       sync_product_info(get_product_url, cb);
     },
+    magento_product_info: function (sku, shop, cb) {
+
+      var magento_conf = magento_confs[shop];
+      var storeView = null;
+
+      function render(result_attributes, result_image) {
+        var i = 0;
+        var attribute_names = new Array();
+        for (x in result_attributes) {
+          attribute_names[i] = x;
+          i++;
+        }
+        console.log(result_attributes);
+        console.log(result_image);
+        var parameter = {};
+        parameter.title = 'Product Info';
+        parameter.url = "product/info_with_image/";
+        parameter.attribute_values = result_attributes;
+        parameter.attribute_names = attribute_names;
+        parameter.images = result_image;
+
+        app.render('product_attributes_image', parameter, function(err, html){
+          cb(html);
+        });
+      }
+
+      magento.catalog.product.info_and_image(sku, storeView, magento_conf, render);
+
+    }
 });
 
 dnode_server.listen(http_server);

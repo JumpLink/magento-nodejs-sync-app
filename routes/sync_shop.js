@@ -25,6 +25,7 @@ product.index = function(req, res) {
   res.render('sync_shop_product_index', render_parameter);
 };
 
+
 //ladet die Seite sobald sie erhältlich ist
 product.info = function(req, res) {
   if (req.query['sku']) {
@@ -50,7 +51,6 @@ product.info_load = function(req, res) {
     var type = 'SKU';
     sync_shop.parse_info_filter(req.query['sku'], function(url_string){
       var parameter = render_parameter;
-          parameter.url = "/"+sync_shops_confs[0].url+"/product/";
           parameter.get_product_url = url_string; 
       res.render('sync_shop_product_attributes_load', parameter);
     });

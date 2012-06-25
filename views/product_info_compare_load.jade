@@ -1,0 +1,19 @@
+//sublime: tab_size 2; translate_tabs_to_spaces true
+extends content_with_menu
+
+block container
+  h1= title
+  .span10#magento
+    include loading
+  .span10#sync
+    include loading
+  script
+    $(document).ready(function () {
+      loadMagentoShopProductAttributes("#{sku}", "#{filter_shop}", function (html_magento) {
+        $('div#magento').html(html_magento);
+        loadSyncShopProductAttributesBySKU('#{sku}', function (html_sync) {
+          $('div#sync').html(html_sync);
+        });
+      })
+    });
+    

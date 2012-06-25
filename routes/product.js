@@ -106,6 +106,18 @@ exports.list = function(req, res){
     res.render('product_list_load', parameters );
 };
 
+exports.info_compare = function(req, res){
+   // var magento_conf = url.getURLShop(req, magento);
+    var parameters = render_parameters;
+    parameters.sku = decodeURIComponent(req.query['sku']);
+    if (req.query['shop'] != null) {
+        parameters.filter_shop = decodeURIComponent(req.query['shop']);
+        parameters.shop_param = url.setShopUrl('', req.query['shop']);
+    }
+
+    res.render('product_info_compare_load', parameters );
+};
+
 
 exports.index = function(req, res){
     res.render('product_index', render_parameters );

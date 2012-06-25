@@ -109,32 +109,32 @@ function productFilterSubmitOnClick(rValue, sValue, iValue) {
     parent.location = url;
 }
 function syncProductFilterSubmitOnClick(rValue, sValue, iValue, url) {
-  console.log(url);
+  //console.log(url);
   iValue = encodeURIComponent(iValue);
-  //url += '/product/';
+  var url_append = '/product/';
   switch (rValue) {
     case 'Name':
-      url = setNameUrl(url + 'list', iValue);
+      url_append = setNameUrl(url_append + 'list', iValue);
       break;
     case 'Product':
-      url = url + 'product_id/' + iValue;
+      url_append = url_append + 'product_id/' + iValue;
       break;
     case 'SKU':
-      url = setSKUUrl(url + 'list', iValue);
+      url_append = setSKUUrl(url_append + 'list', iValue);
       break;
     case 'Set':
-      url = url + 'set/' + iValue;
+      url_append = url_append + 'set/' + iValue;
       break;
     case 'Type':
-      url = url + 'type/' + iValue;
+      url_append = url_append + 'type/' + iValue;
       break;
     case 'Category': //TODO
-      url = url + 'category_id/' + iValue;
+      url_append = url_append + 'category_id/' + iValue;
       break;
   }
   // if(sValue)
   //   url = setShopUrl(url, sValue);
-  parent.location = url;
+  parent.location = url + url_append;
 }
 /* Funktion wird ausgeführt bei Click auf ProductButton */
 function productShopSubmitOnClick(sValue) {

@@ -1,3 +1,4 @@
+// sublime: tab_size 2; translate_tabs_to_spaces true
 var sync_shops_confs = require('./config/sync_shops.js');
 var url = require('./public/javascripts/url_funcs.js');
 var fetchUrl = require("fetch").fetchUrl;
@@ -9,7 +10,7 @@ var render_parameter = {
   , magento_confs: magento.confs
   , magento_shop: magento.confs[0]
   , sync_shop: sync_shops_confs[0]
-  , url: '/' + sync_shops_confs[0].url
+  , sync_shop_url: "/"+sync_shops_confs[0].url
   , filter_shop: 0 //TODO
 };
 
