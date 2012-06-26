@@ -3,8 +3,6 @@ extends content_with_menu
 block container
   include loading
   script
-    // load the productlist if the site is loaded
-    $(document).ready(function () {
-      console.log("#{get_product_url}");
-      loadSyncShopProductAttributes("#{get_product_url}");
-    });
+    get.json_shop.product.info("#{get_product_url}", function (html) {
+      $('.span10').html(html);
+    })

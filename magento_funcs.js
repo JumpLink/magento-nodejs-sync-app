@@ -110,6 +110,9 @@ catalog = {
 
     },
     info_and_image: function(product_id_or_sku, storeView, conf, cb_render) {
+      console.log(product_id_or_sku);
+      console.log(storeView);
+      console.log(conf);
       var magento = require('./magento')(conf);
       var util = require('util');
 

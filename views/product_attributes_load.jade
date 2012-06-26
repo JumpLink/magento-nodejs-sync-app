@@ -1,0 +1,9 @@
+//sublime: tab_size 2; translate_tabs_to_spaces true
+extends content_with_menu
+
+block container
+  include loading
+  script
+    get.magento.product.info("#{product_id}", "#{shop_nr}", function (html) {
+      $('.span10').html(html);
+    });

@@ -1,12 +1,69 @@
 // sublime: tab_size 2; translate_tabs_to_spaces true
+
+
+var get = {
+  index:
+    function(cb) {
+      DNode.connect(function (remote) {
+        remote.routes.index(cb);
+      })
+    }
+  ,loading:
+    function(cb) {
+      DNode.connect(function (remote) {
+        remote.routes.loading(cb);
+      })
+    }
+  ,magento: {
+    product: {
+      index: 
+        function(cb) {
+          DNode.connect(function (remote) {
+            remote.routes.index(cb);
+          })
+        }
+      , list:
+        function (filter_type, input, shop, cb) {
+          DNode.connect(function (remote) {
+            remote.routes.product.list(filter_type, input, shop, cb);
+          })
+        }
+      , info: 
+        function (id_or_sku, shop, cb) {
+          DNode.connect(function (remote) {
+            remote.routes.product.info(id_or_sku, shop, cb);
+          })
+        }
+    }
+    , category: {
+      index: 
+        function(cb) {
+          DNode.connect(function (remote) {
+            remote.routes.category.index(cb);
+          })
+        }
+    }
+  }
+  ,json_shop: {
+    product: {
+      info: function (get_product_url, cb) {
+        DNode.connect(function (remote) {
+          remote.routes.sync_shop.product.info(get_product_url, cb);
+        })
+      },
+      info_by_sku: function(sku, cb) {
+        DNode.connect(function (remote) {
+          remote.routes.sync_shop.product.info_by_sku(sku, cb);
+        })
+      }
+    }
+  }
+}
+
 function loadStatic(content) {
 	switch (content) {
 	case 'index':
-		DNode.connect(function (remote) {
-			remote.routes.index(function (html) {
-				$('.span10').html(html);
-			});
-		});
+		
 		break;
 	case 'product_index':
 		DNode.connect(function (remote) {

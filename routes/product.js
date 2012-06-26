@@ -217,6 +217,18 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
       	res.render('product_attributes', parameter);
       });
   };
+  function info_load_request (req, res){
+    var magento_conf = url.getURLShop(req, magento);
+
+    var parameter = render_parameters;
+    parameter.title = 'Product Info';
+    parameter.url = "/product/info/";
+    parameter.product_id = req.params.product_id;
+    parameter.sync_shop = sync_shops_confs[0];
+    parameter.shop_nr = req.query['shop'];
+
+    res.render('product_attributes_load', parameter);
+  };
   function info_dnode (sku_or_id, shop, cb) {
 
     var magento_conf = magento_confs[shop];
@@ -302,6 +314,8 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
       , list: list_request
       , info_compare: info_compare_request
       , index: index_request
+      , info: info_request
+      , info_load: info_load_request
       , info_and_image: info_and_image_request
       , delete: delete_request
       , image: image_request

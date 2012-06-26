@@ -36,6 +36,7 @@ app.get('/product/product_id/:product_id', routes.request.product.list);
 app.get('/product/set/:set', routes.request.product.list);
 app.get('/product/type/:type', routes.request.product.list);
 app.get('/product/info_compare', routes.request.product.info_compare);
+app.get('/product/info/:product_id', routes.request.product.info_load);
 app.get('/'+sync_shops_confs[0].url, routes.request.sync_shop.index);
 app.get('/'+sync_shops_confs[0].url+'/product', routes.request.sync_shop.product.info);
 //app.get('/'+sync_shops_confs[0].url+'/product/list', sync_shop.product.info);
@@ -53,15 +54,13 @@ app.get('/product/new/:product_id', routes.request.product.new);
 app.get('/product/update/:product_id', routes.request.product.update);
 app.get('/product/sync/:product_id', routes.request.product.sync);
 app.get('/product/delete/:product_id', routes.request.product.delete);
-app.get('/product/info/:product_id', routes.request.product.info);
 app.get('/product/info_with_image/:product_id', routes.request.product.info_and_image);
 app.get('/product/image/:product_id', routes.request.product.image);
 app.get('/product/info/image/:product_id', routes.request.product.image_info);
 
 
+dnode.listen(http_server);
+
 http_server.listen(app.get('port'), '127.0.0.1', function() {
-  dnode.listen(http_server, function() {
-    console.log("Express server and dnode listening on port " + app.get('port'));
-  });
-  
+  console.log("Express server listening on port " + app.get('port'));
 });

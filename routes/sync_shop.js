@@ -13,7 +13,7 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
   //   res.render('408', render_parameter);
   // }
 
-  request.index = function (req, res) {
+  request.index = function index (req, res) {
     res.render('sync_shop_index', render_parameter);
   };
 
@@ -37,7 +37,7 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
       });
     } else {
       console.log('no sku given!');
-      product.index(req, res);
+      request.product.index(req, res);
     }
   };
 
@@ -63,10 +63,10 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
     });
   };
 
-  dnode.product.info.sku = function (sku, cb) {
+  dnode.product.info_by_sku = function (sku, cb) {
     //console.log('dnode get_product_url:' + get_product_url);
     var get_product_url = sync_shop.parse_info_filter(sku, null);
-    product.dnode.info(get_product_url, cb)
+    dnode.product.info(get_product_url, cb)
   };
 
   //ladet die infos mittels dnode nach sobald sie erhältlich sind, zeigt solange ein loader an

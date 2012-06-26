@@ -6,6 +6,7 @@ html(lang='en')
     link(rel='stylesheet', href='/stylesheets/style.css') 
     script(src='/javascripts/jquery.min.js')
     script(src='/dnode.js')
+    script(src='/javascripts/loadContent.js')  
   body
     block content
   script(src='/lib/bootstrap/js/bootstrap.min.js')
@@ -13,7 +14,6 @@ html(lang='en')
   script(src='/javascripts/WindowSize.js')
   script(src='/javascripts/getFullSizeOfElement.js')
   script(src='/javascripts/url_funcs.js')
-  script(src='/javascripts/loadContent.js')
   script
     //This site is an IFrame or not?
     if (urlParam('style') == 'is_iframe') {

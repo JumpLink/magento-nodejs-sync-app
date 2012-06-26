@@ -5,15 +5,12 @@ block container
   h1= title
   .span10#magento
     include loading
-  .span10#sync
+  .span10#json_shop
     include loading
-  script
-    $(document).ready(function () {
-      loadMagentoShopProductAttributes("#{sku}", "#{filter_shop}", function (html_magento) {
-        $('div#magento').html(html_magento);
-        loadSyncShopProductAttributesBySKU('#{sku}', function (html_sync) {
-          $('div#sync').html(html_sync);
+    script
+      get.magento.product.info("#{sku}", "#{filter_shop}", function (html) {
+        $('#magento').html(html);
+        get.json_shop.product.info_by_sku("#{sku}", function (html) {
+          $('#json_shop').html(html);
         });
-      })
-    });
-    
+      });
