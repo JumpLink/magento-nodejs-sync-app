@@ -1,18 +1,13 @@
 // sublime: tab_size 2; translate_tabs_to_spaces true
-/**
- * Module dependencies.
- */
 
 var express = require('express')
   , app = express()
   , routes = require('./routes/routes.js')(app)
-  //, category = require('./routes/category')
-  //, customer = require('./routes/customer')
-  //, product = require('./routes/product')
-  //, sync_shop = require('./routes/sync_shop')
-  //, error = require('./routes/error')
+  , dnode = require('dnode')({ routes: routes.dnode })
   , http = require('http')
-  , sync_shops_confs = require('./config/sync_shops.js');
+  , sync_shops_confs = require('./config/sync_shops.js')
+  , http_server = http.createServer(app)
+  ;
 
 app.configure(function(){
   app.set('port', process.env.PORT || 4242);
@@ -31,9 +26,7 @@ app.configure('development', function(){
 });
 
 //dnode sites/ressources and express-sites without style=is_iframe prameter 
-app.get('/dnode.js', function (res, req, next) {
-
-});
+app.get('/dnode.js', function (res, req, next) { });
 app.get('/', routes.request.index);
 app.get('/product', routes.request.product.index);
 app.get('/product/list', routes.request.product.list);
@@ -65,54 +58,10 @@ app.get('/product/info_with_image/:product_id', routes.request.product.info_and_
 app.get('/product/image/:product_id', routes.request.product.image);
 app.get('/product/info/image/:product_id', routes.request.product.image_info);
 
-var http_server = http.createServer(app);
 
-//dnode
-var dnode = require('dnode');
-//var dnode_server = dnode(require('./dnode_funcs'));
-var magento = require('./magento_funcs');
-var magento_confs = require('./config/magento_confs.js');
-var url = require('./public/javascripts/url_funcs.js');
-
-
-function sync_product_info (get_product_url, cb) {
-  //console.log('dnode get_product_url:' + get_product_url);
-  var sync_shop = require('./sync_shop_funcs.js');
-  sync_shop.get_products(get_product_url, function(data){
-    if(typeof data != undefined)
-      sync_shop.set_render_parameter(data, function(parameter){
-        if (data.ROWCOUNT>0)
-          app.render('product_attributes', parameter, function(err, html){
-            cb(html);
-          });
-        else
-          app.render('no_product', parameter, function(err, html){
-            cb(html);
-          });
-      });
-    else
-      app.render('408', render_parameter, function(err, html){
-        cb(html);
-      });
-  });
-};
-
-dnode_server = dnode({
-    index: routes.dnode.index,
-    product_list: routes.dnode.product.list,
-    loading: routes.dnode.product.loading,
-    sync_product_info: sync_product_info,
-    sync_product_info_by_sku: function (sku, cb) {
-      var sync_shop = require('./sync_shop_funcs.js');
-      var get_product_url = sync_shop.parse_info_filter(sku, null);
-      sync_product_info(get_product_url, cb);
-    },
-    magento_product_info: routes.dnode.product.info,
-});
-
-dnode_server.listen(http_server);
-
-//http
 http_server.listen(app.get('port'), '127.0.0.1', function() {
-  console.log("Express server listening on port " + app.get('port'));
+  dnode.listen(http_server, function() {
+    console.log("Express server and dnode listening on port " + app.get('port'));
+  });
+  
 });

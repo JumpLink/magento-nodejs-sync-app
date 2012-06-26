@@ -24,7 +24,7 @@ module.exports = function (app) {
   function loading_dnode (cb) {
     //console.log('loading..');
     app.render('loading', function(err, html){
-      console.log(html);
+      //console.log(html);
       cb(html);
     });
   }

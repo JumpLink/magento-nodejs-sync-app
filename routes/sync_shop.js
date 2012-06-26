@@ -4,8 +4,8 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
 
   var   fs = require('fs')
       , sync_shop = require('../sync_shop_funcs.js')
-      , product = {}
-      , error = {}
+      , request = {product: {}}
+      , dnode = {product:{}}
       , render_parameter = sync_shop.render_parameter
       ;
 
@@ -13,17 +13,16 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
   //   res.render('408', render_parameter);
   // }
 
-  function index(req, res) {
+  request.index = function (req, res) {
     res.render('sync_shop_index', render_parameter);
   };
 
-  product.index = function(req, res) {
+  request.product.index = function(req, res) {
     res.render('sync_shop_product_index', render_parameter);
   };
 
-
   //ladet die Seite sobald sie erhältlich ist
-  product.info = function(req, res) {
+  request.product.info = function(req, res) {
     if (req.query['sku']) {
       var type = 'SKU';
       sync_shop.parse_info_filter(req.query['sku'], function(url_string){
@@ -41,8 +40,37 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
       product.index(req, res);
     }
   };
+
+  dnode.product.info = function (get_product_url, cb) {
+    //console.log('dnode get_product_url:' + get_product_url);
+    var sync_shop = require('../sync_shop_funcs.js');
+    sync_shop.get_products(get_product_url, function(data){
+      if(typeof data != undefined)
+        sync_shop.set_render_parameter(data, function(parameter){
+          if (data.ROWCOUNT>0)
+            app.render('product_attributes', parameter, function(err, html){
+              cb(html);
+            });
+          else
+            app.render('no_product', parameter, function(err, html){
+              cb(html);
+            });
+        });
+      else
+        app.render('408', render_parameter, function(err, html){
+          cb(html);
+        });
+    });
+  };
+
+  dnode.product.info.sku = function (sku, cb) {
+    //console.log('dnode get_product_url:' + get_product_url);
+    var get_product_url = sync_shop.parse_info_filter(sku, null);
+    product.dnode.info(get_product_url, cb)
+  };
+
   //ladet die infos mittels dnode nach sobald sie erhältlich sind, zeigt solange ein loader an
-  product.info_load = function(req, res) {
+  request.product.info_load = function(req, res) {
     if (req.query['sku']) {
       var type = 'SKU';
       sync_shop.parse_info_filter(req.query['sku'], function(url_string){
@@ -57,14 +85,8 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
   };
 
   return {
-    request: {
-        product: product
-      , index: index
-
-    },
-    dnode: {
-
-    }
+      request: request
+    , dnode: dnode
   }
 
 }

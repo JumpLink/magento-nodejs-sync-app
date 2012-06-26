@@ -3,28 +3,28 @@ function loadStatic(content) {
 	switch (content) {
 	case 'index':
 		DNode.connect(function (remote) {
-			remote.index(function (html) {
+			remote.routes.index(function (html) {
 				$('.span10').html(html);
 			});
 		});
 		break;
 	case 'product_index':
 		DNode.connect(function (remote) {
-			remote.product_index(function (html) {
+			remote.routes.product.index(function (html) {
 				$('.span10').html(html);
 			});
 		});
 		break;
 	case 'category_index':
 		DNode.connect(function (remote) {
-			remote.category_index(function (html) {
+			remote.routes.category.index(function (html) {
 				$('.span10').html(html);
 			});
 		});
 		break;
 	case 'loading':
 		DNode.connect(function (remote) {
-			remote.loading(function (html) {
+			remote.routes.loading(function (html) {
 				$('.span10').html(html);
 			});
 		});
@@ -34,26 +34,26 @@ function loadStatic(content) {
 
 function loadProducts(filter_type, input, shop) {
   DNode.connect(function (remote) {
-    remote.product_list(filter_type, input, shop, function (html) {
+    remote.routes.product.list(filter_type, input, shop, function (html) {
       $('.span10').html(html);
     });
   });
 }
 function loadMagentoShopProductAttributes(id_or_sku, shop, cb) {
   DNode.connect(function (remote) {
-    remote.magento_product_info(id_or_sku, shop, cb);
+    remote.routes.product.info(id_or_sku, shop, cb);
   });
 }
 
 function loadSyncShopProductAttributes(get_product_url) {
   DNode.connect(function (remote) {
-    remote.sync_product_info(get_product_url, function (html) {
+    remote.routes.sync_shop.product.info(get_product_url, function (html) {
       $('.span10').html(html);
     });
   });
 }
 function loadSyncShopProductAttributesBySKU(sku, cb) {
   DNode.connect(function (remote) {
-    remote.sync_product_info_by_sku(sku, cb);
+    remote.routes.sync_shop.product.info.sku(sku, cb);
   });
 }

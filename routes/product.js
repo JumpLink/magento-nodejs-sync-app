@@ -157,6 +157,12 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
       res.render('product_index', render_parameters );
   };
 
+  function index_dnode (cb){
+    app.render('product_index', render_parameters, function(err, html){
+     cb(html);
+    });
+  }
+
   function info_and_image_request (req, res){
   	var magento_conf = url.getURLShop(req, magento);
   	var storeView = null;
@@ -303,6 +309,7 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
     dnode: {
         list: list_dnode
       , info: info_dnode
+      , index: index_dnode
     }
   }
 }
