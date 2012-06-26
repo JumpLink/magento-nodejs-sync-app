@@ -9,6 +9,7 @@
     "express": "3.0",
     "jade": "latest",
     "xmlrpc": "latest",
-    "dnode": "latest"
+    "dnode": "latest",
+    "fetch": "latest"
   }
 }
