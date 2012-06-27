@@ -7,6 +7,7 @@ var express = require('express')
   , http = require('http')
   , sync_shops_confs = require('./config/sync_shops.js')
   , http_server = http.createServer(app)
+  , Iconv = require('iconv')//.Iconv
   ;
 
 app.configure(function(){

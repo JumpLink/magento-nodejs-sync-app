@@ -1,8 +1,8 @@
 tr
-  td: #{i}
-  td #{category.name}
-  td: a(href="#{url}/#{category.category_id}#{shop_param}", target="_top"): #{category.category_id}
-  td: a(href="#{url}/#{category.parent_id}#{shop_param}", target="_top"): #{category.parent_id}
-  td #{category.is_active}
-  td #{category.position}
-  td #{category.level}
+  td!= i
+  td!= category.name
+  td: a(href="#{url}/#{category.category_id}#{shop_param}", target="_top")!= category.category_id
+  td: a(href="#{url}/#{category.parent_id}#{shop_param}", target="_top")!= category.parent_id
+  td!= category.is_active
+  td!= category.position
+  td!= category.level

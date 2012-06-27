@@ -27,4 +27,5 @@ table.table.table-bordered
         include product_tbody
         td
           each category_id in product.category_ids
-            a(href="/category/products/#{category_id}#{shop_param}", target="_top"): #{category_id},
+            a(href="/category/products/#{category_id}#{shop_param}", target="_top")
+              | #{category_id},

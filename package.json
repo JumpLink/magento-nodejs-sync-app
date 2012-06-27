@@ -9,7 +9,9 @@
     "express": "3.0",
     "jade": "latest",
     "xmlrpc": "latest",
-    "dnode": "latest",
-    "fetch": "latest"
+    "dnode": "0.9.12",
+    "fetch": "latest",
+    "range-parser": "latest",
+    "iconv": "1.1.2"
   }
 }

@@ -17,11 +17,11 @@ block content
     fileset
       form.form-horizontal(target="_parent", name='general')
           .control-group
-            label.control-label: | Shop Version
+            label.control-label Shop Version
             .controls
               select.span3
                 each magento_conf, i in magento_confs
-                  option(name="#{i}"): #{magento_conf.name} #{magento_conf.shop_version}
+                  option(name="#{i}")!= magento_conf.name + " " + magento_conf.shop_version
     .form-actions
       .input-append
         input.span2(id="appendedInputButton", size="16", type="number", min="1", value="1")
