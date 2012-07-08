@@ -56,6 +56,13 @@ var get = {
           remote.routes.sync_shop.product.info_by_sku(sku, cb);
         })
       }
+    },
+    partnums: {
+      index: function(cb) {
+        DNode.connect(function (remote) {
+          remote.routes.sync_shop.partnums.index(cb);
+        }) 
+      }
     }
   }
 }

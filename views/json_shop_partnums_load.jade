@@ -1,0 +1,8 @@
+extends content_with_menu
+
+block container
+  include loading
+  script
+    get.json_shop.partnums.index(function (html) {
+      $('.span10').html(html);
+    })

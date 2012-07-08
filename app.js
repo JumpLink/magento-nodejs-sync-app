@@ -40,6 +40,7 @@ app.get('/product/info_compare', routes.request.product.info_compare);
 app.get('/product/info/:product_id', routes.request.product.info_load);
 app.get('/'+sync_shops_confs[0].url, routes.request.sync_shop.index);
 app.get('/'+sync_shops_confs[0].url+'/product', routes.request.sync_shop.product.info);
+app.get('/'+sync_shops_confs[0].url+'/partnums', routes.request.sync_shop.partnums.index_load);
 //app.get('/'+sync_shops_confs[0].url+'/product/list', sync_shop.product.info);
 app.get('/'+sync_shops_confs[0].url+'/product/list', routes.request.sync_shop.product.info_load);
 
