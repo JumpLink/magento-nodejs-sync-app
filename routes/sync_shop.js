@@ -43,12 +43,12 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
 
   dnode.product.info = function (get_product_url, cb) {
     //console.log('dnode get_product_url:' + get_product_url);
-    var sync_shop = require('../sync_shop_funcs.js');
+    var sync_shop = require('../json_shop_funcs.js');
     json_shop.get_products(get_product_url, function(data){
       if(typeof data != undefined)
         json_shop.set_render_parameter(data, function(parameter){
           if (data.ROWCOUNT>0)
-            app.render('product_attributes', parameter, function(err, html){
+            app.render('json_shop_product_info', parameter, function(err, html){
               cb(html);
             });
           else
@@ -75,8 +75,9 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
       var type = 'SKU';
       json_shop.parse_info_filter(req.query['sku'], function(url_string){
         var parameter = render_parameter;
+            parameter.url += '/product/';
             parameter.get_product_url = url_string; 
-        res.render('sync_shop_product_attributes_load', parameter);
+        res.render('json_shop_product_info_load', parameter);
       });
     } else {
       console.log('no sku given!');
@@ -93,6 +94,7 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
         //console.log(data);
         if(typeof data != undefined) {
           json_shop.set_render_parameter(data, function(parameter){
+            parameter.url += '/product/info';
             if (data.ROWCOUNT>0)
               app.render('json_shop_partnums', parameter, function(err, html){
                 cb(html);
@@ -112,10 +114,8 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
   };
 
   request.partnums.index_load = function(req, res) {
-    json_shop.get_partnums_url(function(url_string){
-      var parameter = render_parameter;
-      res.render('json_shop_partnums_load', parameter);
-    });
+    var parameter = render_parameter;
+    res.render('json_shop_partnums_load', parameter);
   };
 
   return {

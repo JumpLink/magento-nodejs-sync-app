@@ -7,4 +7,8 @@ block container
           .span4
             dt #{attribute_name}
             each value, i in attribute_values[attribute_name]
-              dd #{value}
+              - if (attribute_name == 'CODE')
+                dd
+                  a(href='#{url}?sku=#{value}') #{value}
+              - else
+                dd #{value}

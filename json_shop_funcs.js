@@ -52,9 +52,31 @@ function get_partnums_url(cb) {
 
 function set_render_parameter(data, cb) {
   var parameter = render_parameter;
-      parameter.url = "/"+sync_shops_confs[0].url+"/product/";
+      parameter.url = "/"+sync_shops_confs[0].url;
       parameter.attribute_values = data.DATA;
       parameter.attribute_names = data.COLUMNS;
+      if(parameter.attribute_values.DESCRIPTION) {
+        console.log(parameter.attribute_values.DESCRIPTION);
+        parameter.description_values = parameter.attribute_values.DESCRIPTION[0].split('$');
+        parameter.description_names = new Array(parameter.description_values.length);
+
+
+        console.log(parameter.description_values);
+        console.log(parameter.attribute_names);
+
+        switch (parameter.description_values.length) {
+          case 5:
+            parameter.description_names[4] = 'Metrics';
+          case 4:
+            parameter.description_names[3] = 'Fitting Info';
+          case 3:
+            parameter.description_names[2] = 'Quality';
+          case 2:
+            parameter.description_names[1] = 'Description';
+          case 1:
+            parameter.description_names[0] = 'Applications';
+        }
+      }
       parameter.shop_param = '';
   if(typeof cb != 'undefined')
     cb(parameter);

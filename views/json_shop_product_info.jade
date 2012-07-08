@@ -1,0 +1,13 @@
+//sublime: tab_size 2; translate_tabs_to_spaces true
+//extends content_with_menu
+
+block container
+  h1= title
+  dl.dl-horizontal
+    each attribute_name, i in attribute_names
+      - if(attribute_name != 'DESCRIPTION')
+        dt #{attribute_name}
+        dd #{attribute_values[attribute_name]} &nbsp
+    each description_name, i in description_names
+      dt #{description_name}
+      dd #{description_values[i]} &nbsp
