@@ -1,5 +1,5 @@
 extends content_with_menu
-
+  
 block container
   .page-header
     h1 Retrieve products list
@@ -7,38 +7,124 @@ block container
       .control-group
         label.control-label Shop Version
         .controls
-          select
+          select(onchange="shop_version_is_choosen(this.selectedIndex)")
             each magento_conf, i in magento_confs
               option(name="#{i}")!= magento_conf.name + " " + magento_conf.shop_version
-  .form-actions
-    button.btn.btn-primary(type="button", onClick="javascript:productShopSubmitOnClick($('select option:selected').attr('name'))") List all products
-    //button.btn.btn-primary(type="button", onClick="javascript:loadProductOnClick(null, null, $('select option:selected').attr('name'))") List all products DNode
-  h2 By filter
   form.form-horizontal(target="_parent", name='filterForm')
     fileset
+      .control-group
+        label.control-label Store View
+        .controls
+          each magento_conf, i in magento_confs
+            - if(i != 0)
+              select.storeview_selecter(id='storeview_selecter_#{i}', style="display:none")
+                option(name="all") All
+                each store_view, k in magento_confs[i].store_view
+                  option(name="#{store_view.code}")!= store_view.name
+            - else
+              select.storeview_selecter(id='storeview_selecter_#{0}')
+                option(name="all") All
+                each store_view, k in magento_confs[i].store_view
+                  option(name="#{store_view.code}")!= store_view.name
       .control-group
         label.control-label Choose simple filter
         .controls
           label.radio
-            input(type='radio', name='FilterTyp', value='Name', id='#RadioName',  checked='')
+            input(type='radio', name='FilterTyp', value='All', id='#RadioAll',  checked='', onclick="radioButtonAllOnClick()")
+            | All
+          label.radio
+            input(type='radio', name='FilterTyp', value='Name', id='#RadioName', onclick="radioButtonOtherAsAllOnClick()")
             | Name
           label.radio
-            input(type='radio', name='FilterTyp', value='Product', id='#RadioProduct')
+            input(type='radio', name='FilterTyp', value='Product', id='#RadioProduct', onclick="radioButtonOtherAsAllOnClick()")
             | Product ID
           label.radio
-            input(type='radio', name='FilterTyp', value='SKU', id='#RadioSKU')
+            input(type='radio', name='FilterTyp', value='SKU', id='#RadioSKU', onclick="radioButtonOtherAsAllOnClick()")
             | SKU
           label.radio
-            input(type='radio', name='FilterTyp', value='Set', id='#RadioSet')
+            input(type='radio', name='FilterTyp', value='Set', id='#RadioSet', onclick="radioButtonOtherAsAllOnClick()")
             | Set
           label.radio
-            input(type='radio', name='FilterTyp', value='Type', id='#RadioType')
+            input(type='radio', name='FilterTyp', value='Type', id='#RadioType', onclick="radioButtonOtherAsAllOnClick()")
             | Type
           label.radio
             input(type='radio', name='FilterTyp', value='Category', id='#RadioCategory', disabled)
             span.muted Category ID
+      .control-group
+        label.control-label Simple Filter Value
+        .controls
+          input(id="appendedInputButton", size="16", type="text", disabled)
   .form-actions
-    .input-append
-      input(id="appendedInputButton", size="16", type="text")
-      button.btn.btn-success(type="button", placeholder="Value to filter", onClick="javascript:productFilterSubmitOnClick($('input:radio[name=FilterTyp]:checked').val(), $('select option:selected').attr('name'), $('#appendedInputButton').val())") Use!
-      //button.btn.btn-success(type="button", placeholder="Value to filter", onClick="javascript:loadProductOnClick($('input:radio[name=FilterTyp]:checked').val(), $('#appendedInputButton').val(), $('select option:selected').attr('name'))") Use! DNode
+    button.btn.btn-success(type="button", placeholder="Value to filter", onClick="javascript:productFilterSubmitOnClick('#{magento_confs[0].url}', $('input:radio[name=FilterTyp]:checked').val(), $('select option:selected').attr('name'), $('#appendedInputButton').val(), getStoreViewValue())") Use!
+  script
+    function radioButtonAllOnClick() {
+      $("#appendedInputButton").attr("disabled", "disabled");
+    }
+    function radioButtonOtherAsAllOnClick() {
+      $("#appendedInputButton").removeAttr("disabled");                       
+    }
+    function shop_version_is_choosen(index){
+      console.log('shop version is choosen' + index);
+      $('.storeview_selecter').each(function(index, Element) {
+        $(this).hide();
+      });
+      $('#storeview_selecter_'+index).show();
+    }
+    function getStoreViewValue() {
+    var value = '';
+      $('.storeview_selecter').each(function(index, Element, cb) {
+        //console.log(this);
+        //console.log($(this).is(':hidden'));
+        if ($(this).is(':hidden') == false){
+          value = $(this).children('select option:selected').attr('name');
+          return false;
+        }
+      });
+      return value;
+    }      
+    /* Funktionien für die Clientseitige anpassung der URL für Magento-Filter, Funktion wird ausgeführt bei Click auf ProductButton */
+    function productFilterSubmitOnClick(magento_url, rValue, sValue, iValue, storeView) {
+      //console.log('Radio Wert: ' + rValue);
+      //console.log('Select Wert: ' + sValue);
+      //console.log('Input Wert: ' + iValue);
+      console.log(storeView);
+      iValue = encodeURIComponent(iValue);
+      //console.log('Input Wert: ' + iValue);
+      var url = '/'+magento_url +'/product/';
+      /* Anpassung der URL ohne Parameter */
+      switch (rValue) {
+        case 'All':
+          url += 'list';
+          break;
+        case 'Name':
+          /*url = url + 'name/' + iValue;*/
+          // mit Parameter
+          url = setNameUrl(url + 'list', iValue);
+          break;
+        case 'Product':
+          url = url + 'product_id/' + iValue;
+          break;
+        case 'SKU':
+          /*url = url + 'sku/' + iValue;*/
+          // mit Parameter
+          url = setSKUUrl(url + 'list', iValue);
+          break;
+        case 'Set':
+          url = url + 'set/' + iValue;
+          break;
+        case 'Type':
+          url = url + 'type/' + iValue;
+          break;
+        case 'Category': //TODO
+          url = url + 'category_id/' + iValue;
+          break;
+      }
+
+      if(sValue)
+        url = setShopUrl(url, sValue);
+      if(storeView && storeView != 'all')
+        url = setParameterUrl(url, 'storeView', storeView);
+
+      //console.log('URL: ' + url);
+      parent.location = url;
+    }

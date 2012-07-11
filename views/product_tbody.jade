@@ -1,6 +1,6 @@
 td!= i
 td!= product.name
-td: a(href="/product/product_id/#{product.product_id}#{shop_param}", target="_top")!= product.product_id
-td!= product.sku
-td: a(href="/product/set/#{product.set}#{shop_param}", target="_top")!= product.set
-td: a(href="/product/type/#{product.type}#{shop_param}", target="_top")!= product.type
+td: a(href="/#{magento_shop.url}/product/product_id/#{product.product_id}#{shop_param}", target="_top")!= product.product_id
+td: a(href="/#{magento_shop.url}/product/list#{shop_param}&sku=#{product.sku}", target="_top")!= product.sku
+td: a(href="/#{magento_shop.url}/product/set/#{product.set}#{shop_param}", target="_top")!= product.set
+td: a(href="/#{magento_shop.url}/product/type/#{product.type}#{shop_param}", target="_top")!= product.type

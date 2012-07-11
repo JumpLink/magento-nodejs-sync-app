@@ -23,15 +23,15 @@ var get = {
           })
         }
       , list:
-        function (filter_type, input, shop, cb) {
+        function (filter_type, input, shop, storeView, cb) {
           DNode.connect(function (remote) {
-            remote.routes.product.list(filter_type, input, shop, cb);
+            remote.routes.product.list(filter_type, input, shop, storeView, cb);
           })
         }
       , info: 
-        function (id_or_sku, shop, cb) {
+        function (id_or_sku, shop, storeView, cb) {
           DNode.connect(function (remote) {
-            remote.routes.product.info(id_or_sku, shop, cb);
+            remote.routes.product.info(id_or_sku, shop, storeView, cb);
           })
         }
     }
@@ -95,17 +95,16 @@ function loadStatic(content) {
 		break;
 	}
 }
-
-function loadProducts(filter_type, input, shop) {
+function loadProducts(filter_type, input, shop, storeView) {
   DNode.connect(function (remote) {
-    remote.routes.product.list(filter_type, input, shop, function (html) {
+    remote.routes.product.list(filter_type, input, shop, storeView, function (html) {
       $('.span10').html(html);
     });
   });
 }
-function loadMagentoShopProductAttributes(id_or_sku, shop, cb) {
+function loadMagentoShopProductAttributes(id_or_sku, shop, storeView, cb) {
   DNode.connect(function (remote) {
-    remote.routes.product.info(id_or_sku, shop, cb);
+    remote.routes.product.info(id_or_sku, shop, storeView, cb);
   });
 }
 

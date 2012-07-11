@@ -2,35 +2,35 @@
 .well(style="padding: 8px 0;")
   ul.nav.nav-list
     li.active
-      a(href="/")
+      a(href="/#{magento_shop.url}")
         i.icon-star.icon-white
         | #{magento_shop.name}
     li
-      a(href="/product")
+      a(href="/#{magento_shop.url}/product")
         i.icon-tag
         | Product
     li
-      a(href="/category")
+      a(href="/#{magento_shop.url}/category")
         i.icon-book
         | Category
     //  li
-    //   a(href="/customer")
+    //   a(href="/#{magento_shop.url}/customer")
     //     i.icon-user
     //     | Customer
     // li
-    //   a(href="/country")
+    //   a(href="/#{magento_shop.url}/country")
     //     i.icon-flag
     //     | Country
     // li
-    //   a(href="/region")
+    //   a(href="/#{magento_shop.url}/region")
     //     i.icon-road
     //     | Region
     // li
-    //   a(href="/order")
+    //   a(href="/#{magento_shop.url}/order")
     //     i.icon-barcode
     //     | Order
     // li
-    //   a(href="/shipment")
+    //   a(href=/#{magento_shop.url}/shipment")
     //     i.icon-envelope
     //     | shipment
     li.active

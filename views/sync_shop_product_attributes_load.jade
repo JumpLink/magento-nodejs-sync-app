@@ -1,8 +1,0 @@
-extends content_with_menu
-
-block container
-  include loading
-  script
-    get.json_shop.product.info("#{get_product_url}", function (html) {
-      $('.span10').html(html);
-    })

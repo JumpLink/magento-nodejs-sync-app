@@ -155,4 +155,17 @@ catalog = {
   }
 }
 
+var
+store = {
+  list: function(conf, cb) {
+    var magento = require('./magento')(conf),
+      util = require('util');
+
+    magento.init(function(err) {
+      magento.core_magento.info(cb);
+    });
+  }
+}
+
 module.exports.catalog = catalog;
+module.exports.store = store;
