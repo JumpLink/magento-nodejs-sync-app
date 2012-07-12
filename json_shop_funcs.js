@@ -55,14 +55,13 @@ function set_render_parameter(data, cb) {
       parameter.url = "/"+sync_shops_confs[0].url;
       parameter.attribute_values = data.DATA;
       parameter.attribute_names = data.COLUMNS;
-      if(parameter.attribute_values.DESCRIPTION) {
-        console.log(parameter.attribute_values.DESCRIPTION);
+      if(data.ROWCOUNT>0 && parameter.attribute_values.DESCRIPTION) {
+        //console.log(parameter.attribute_values.DESCRIPTION);
         parameter.description_values = parameter.attribute_values.DESCRIPTION[0].split('$');
         parameter.description_names = new Array(parameter.description_values.length);
 
-
-        console.log(parameter.description_values);
-        console.log(parameter.attribute_names);
+        //console.log(parameter.description_values);
+        //console.log(parameter.attribute_names);
 
         switch (parameter.description_values.length) {
           case 5:

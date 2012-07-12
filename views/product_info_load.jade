@@ -6,6 +6,6 @@ block container
   script
     // load the content if the site is loaded
     $(document).ready(function () {
-      loadMagentoShopProductAttributes("#{sku}", "#{filter_shop}", function (html) {
+      loadMagentoShopProductAttributes("#{sku}", "#{filter_shop}", "#{storeView}", function (html) {
         $('container').html(html);
       })

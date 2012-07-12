@@ -8,7 +8,7 @@ block container
   .span10#json_shop
     include loading
     script
-      get.magento.product.info("#{sku}", "#{filter_shop}", function (html) {
+      get.magento.product.info("#{sku}", "#{filter_shop}", "#{storeView}", function (html) {
         $('#magento').html(html);
         get.json_shop.product.info_by_sku("#{sku}", function (html) {
           $('#json_shop').html(html);
