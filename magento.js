@@ -123,7 +123,7 @@ module.exports = function(config) {
 			if (obj[apis[0]] == undefined)
 				obj[apis[0]] = {};
 			obj[apis[0]][apis[1]] = function() {
-				console.log('calling xcall for ' + apiname + '(' + arguments[0] + '...);');
+				//console.log('calling xcall for ' + apiname + '(' + arguments[0] + '...);');
 				obj._xcall.call(obj, apiname, arguments );
 			}
 		}
