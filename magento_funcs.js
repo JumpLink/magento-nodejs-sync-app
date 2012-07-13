@@ -3,7 +3,7 @@ module.exports.confs = confs;
 
 function getConfByNameVersion (confs, string) {
   for (var k=0; k<confs.length; k++) {
-    console.log('string ' + string + ' confstring: ' + confs[k].name + ' ' + confs[k].shop_version);
+    //console.log('string ' + string + ' confstring: ' + confs[k].name + ' ' + confs[k].shop_version);
     if(string == confs[k].name + ' ' + confs[k].shop_version)
       return confs[k];
   }
@@ -110,23 +110,37 @@ catalog = {
 
     },
     info_and_image: function(product_id_or_sku, storeView, conf, cb_render) {
-      console.log(product_id_or_sku);
-      console.log(storeView);
-      console.log(conf);
+      // console.log(product_id_or_sku);
+      // console.log(storeView);
+      // console.log(conf);
       var magento = require('./magento')(conf);
-      var util = require('util');
 
       magento.init(function(err) {
-        magento.catalog_product.info(product_id_or_sku, storeView, function(error, result_atributes) {
+        magento.catalog_product.info(product_id_or_sku, storeView, function(error, result_attributes) {
           if (error) { throw error; }
           magento.catalog_product_attribute_media.list(product_id_or_sku, storeView, function(error, result_image) {
             if (error) { throw error; }
-            cb_render(result_atributes, result_image);
+            cb_render(result_attributes, result_image);
           });
         }); 
         
       });
 
+    },
+    update: function(product_id_or_sku, productData, storeView, conf, cb_render) {
+      // console.log(product_id_or_sku);
+      // console.log(productData);
+      // console.log(storeView);
+      // console.log(conf);
+      var magento = require('./magento')(conf);
+      var product_id_or_sku = product_id_or_sku;
+      magento.init(function(err) {
+        magento.catalog_product.update(product_id_or_sku, productData, storeView, function(error, result) {
+          //if (error) { throw error; }
+          //console.log("updated sku: "+product_id_or_sku);
+          cb_render(error, product_id_or_sku, result);
+        }); 
+      });
     },
     attribute: {
       media: {
