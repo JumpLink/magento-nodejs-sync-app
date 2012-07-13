@@ -13,6 +13,7 @@
     "fetch": "latest",
     "range-parser": "latest",
     "iconv": "1.1.2",
-    "colors": "latest"
+    "colors": "latest",
+    "log": "latest"
   }
 }

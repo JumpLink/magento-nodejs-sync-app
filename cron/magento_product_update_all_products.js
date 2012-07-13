@@ -13,6 +13,13 @@ var magento = require('../magento_funcs');
 var util = require('util');
 var colors = require('colors');
 
+var Log = require('log')
+  , fs = require('fs')
+  , stream_sku = fs.createWriteStream(__dirname + '/failed_skus.log', { flags: 'a' })
+  , stream_err = fs.createWriteStream(__dirname + '/error.log', { flags: 'a' })
+  , log_sku = new Log('debug', stream_sku)
+  , log_err = new Log('debug', stream_err);
+
 var filter = null;
 var storeView = null;
 var shop_index = 0;
@@ -66,40 +73,52 @@ function update_products_with_one_connect() {
   var current_magento = require('../magento')(magento_confs[shop_index]);
   current_magento.init(function(err) {
     current_magento.catalog_product.list(filter, storeView, function(error, result) {
-    //console.log(result);
       for (var i = result.length - 1; i >= 0; i--) {
         var sku = result[i].sku;
         json_product(sku, function(sku, data){
-          //console.log(sku);
           if(typeof data != undefined && data.ROWCOUNT>0) {
-            //console.log("vwheritage yes");
-            pausecomp(10);
             json_shop.getProductDataForMagentoAttributes(sku, data, function(sku, magento_attributes){
-              //console.log(magento_attributes);
-              //console.log('sku: '+sku);
               var storeView = null;
               var shop_index = 0;
-              // try {
-                current_magento.catalog_product.update(sku, magento_attributes, storeView, function(error, result) {
-                  
-                  if (error) {util.error('product update with sku: '+sku.blue+' failed: '.red + util.inspect(error));}
-                  else {util.log('product update with sku: '+sku.blue+' successful'.green+', result: '+util.inspect(result));}
-                  
-                  // if (error) { throw error; }
-                });
-              // } catch (error) {
-              //     console.log("Error with sku " + sku + ": ", err)
-              // }
+              current_magento.catalog_product.update(sku, magento_attributes, storeView, function(error, result) {
+                if (error) { //TODO rekursion or itteration
+                  pausecomp(1000);
+                  /*second try*/
+                  current_magento.catalog_product.update(sku, magento_attributes, storeView, function(error, result) {
+                    if (error) {
+                      pausecomp(2000);
+                      /*third try*/
+                      current_magento.catalog_product.update(sku, magento_attributes, storeView, function(error, result) {
+                        if (error) {
+                          /*no more try*/
+                          util.error('product update with sku: '+sku.blue+' failed: '.red + util.inspect(error));
+                          log_err.error('product update with sku: '+sku+' failed: ' + util.inspect(error));
+                          log_sku.debug(sku);
+                          pausecomp(1000);
+                        }
+                        else {
+                          util.log('product update with sku: '+sku.blue+' successful'.green+', result: '+util.inspect(result));
+                        }
+                      });
+                    }
+                    else {
+                      util.log('product update with sku: '+sku.blue+' successful'.green+', result: '+util.inspect(result));
+                    }
+                  });
+                }
+                else {
+                  util.log('product update with sku: '+sku.blue+' successful'.green+', result: '+util.inspect(result));
+                }
+              });
             });
           }
           else{
-            //console.log("vwheritage no");
+            //json-shop has not the same itemnumber
           }
         });
       }
     });
   });
 }
-
 //update_products_with_each_new_connect();
 update_products_with_one_connect();
