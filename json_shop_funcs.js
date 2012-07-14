@@ -81,7 +81,11 @@ function getProductDataForMagentoAttributes(sku, rawData, cb) {
     if(description.names[i] !== 'undefined' && description.names[i] != null && description.names[i].length > 0)
       data[json_shops_confs[0].url+'_'+description.names[i].toLowerCase().replace(" ","_")]=description.values[i];
   }
-  delete data.vwheritage_itemnumber;
+  delete data[json_shops_confs[0].url+'_itemnumber'];
+  data[json_shops_confs[0].url+'_lastupdate'] = new Date().toJSON();
+  // console.log('date: ');
+  // console.log(data[json_shops_confs[0].url+'_lastupdate']);
+  // console.log(new Date(data[json_shops_confs[0].url+'_lastupdate']));
   cb(sku, data);
 }
 
