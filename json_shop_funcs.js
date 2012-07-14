@@ -82,10 +82,8 @@ function getProductDataForMagentoAttributes(sku, rawData, cb) {
       data[json_shops_confs[0].url+'_'+description.names[i].toLowerCase().replace(" ","_")]=description.values[i];
   }
   delete data[json_shops_confs[0].url+'_itemnumber'];
-  data[json_shops_confs[0].url+'_lastupdate'] = new Date().toJSON();
-  // console.log('date: ');
-  // console.log(data[json_shops_confs[0].url+'_lastupdate']);
-  // console.log(new Date(data[json_shops_confs[0].url+'_lastupdate']));
+  //data[json_shops_confs[0].url+'_lastupdate'] = new Date().toJSON();
+  data[json_shops_confs[0].url+'_lastupdate'] = new Date();
   cb(sku, data);
 }
 
