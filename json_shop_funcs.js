@@ -83,7 +83,7 @@ function getProductDataForMagentoAttributes(sku, rawData, cb) {
   }
   delete data[json_shops_confs[0].url+'_itemnumber'];
   //data[json_shops_confs[0].url+'_lastupdate'] = new Date().toJSON();
-  data[json_shops_confs[0].url+'_lastupdate'] = new Date();
+  data[json_shops_confs[0].url+'_lastupdate'] = new Date().toString();
   cb(sku, data);
 }
 
