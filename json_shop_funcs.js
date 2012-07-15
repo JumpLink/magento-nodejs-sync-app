@@ -70,6 +70,48 @@ function splitDescriptionData(rawDescription) {
   return description;
 }
 
+function getDate(){
+  var d = new Date();
+  var curr_date = d.getDate();
+  var curr_month = d.getMonth();
+  curr_month++;
+  var curr_year = d.getFullYear();
+  return curr_month + "/" + curr_date + "/" + curr_year;
+}
+
+function getTime(){
+  var a_p = "";
+  var d = new Date();
+  var curr_hour = d.getHours();
+  if (curr_hour < 12)
+     {
+     a_p = "AM";
+     }
+  else
+     {
+     a_p = "PM";
+     }
+  if (curr_hour == 0)
+     {
+     curr_hour = 12;
+     }
+  if (curr_hour > 12)
+     {
+     curr_hour = curr_hour - 12;
+     }
+
+  var curr_min = d.getMinutes();
+
+  curr_min = curr_min + "";
+
+  if (curr_min.length == 1)
+     {
+     curr_min = "0" + curr_min;
+     }
+
+  return curr_hour + ":" + curr_min + " " + a_p;
+}
+
 function getProductDataForMagentoAttributes(sku, rawData, cb) {
   var data = {};
   for (var i = rawData.COLUMNS.length - 1; i >= 0; i--) {
@@ -83,7 +125,8 @@ function getProductDataForMagentoAttributes(sku, rawData, cb) {
   }
   delete data[json_shops_confs[0].url+'_itemnumber'];
   //data[json_shops_confs[0].url+'_lastupdate'] = new Date().toJSON();
-  data[json_shops_confs[0].url+'_lastupdate'] = new Date().toString();
+  data[json_shops_confs[0].url+'_lastupdate'] = getDate()+" "+getTime();
+  console.log(data[json_shops_confs[0].url+'_lastupdate']);
   cb(sku, data);
 }
 
