@@ -70,8 +70,9 @@ function splitDescriptionData(rawDescription) {
   return description;
 }
 
-function getDate(){
-  var d = new Date();
+function getDate() {
+  var now = new Date(); 
+  var d = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
   var curr_date = d.getDate();
   var curr_month = d.getMonth();
   curr_month++;
@@ -79,35 +80,31 @@ function getDate(){
   return curr_month + "/" + curr_date + "/" + curr_year;
 }
 
-function getTime(){
+function getTime() {
   var a_p = "";
-  var d = new Date();
+  var now = new Date(); 
+  var d = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
   var curr_hour = d.getHours();
-  if (curr_hour < 12)
-     {
-     a_p = "AM";
-     }
-  else
-     {
-     a_p = "PM";
-     }
-  if (curr_hour == 0)
-     {
-     curr_hour = 12;
-     }
-  if (curr_hour > 12)
-     {
-     curr_hour = curr_hour - 12;
-     }
+  if (curr_hour < 12) {
+    a_p = "AM";
+  }
+  else {
+    a_p = "PM";
+  }
+  if (curr_hour == 0) {
+    curr_hour = 12;
+  }
+  if (curr_hour > 12) {
+    curr_hour = curr_hour - 12;
+  }
 
   var curr_min = d.getMinutes();
 
   curr_min = curr_min + "";
 
-  if (curr_min.length == 1)
-     {
-     curr_min = "0" + curr_min;
-     }
+  if (curr_min.length == 1) {
+  curr_min = "0" + curr_min;
+  }
 
   return curr_hour + ":" + curr_min + " " + a_p;
 }
@@ -126,7 +123,7 @@ function getProductDataForMagentoAttributes(sku, rawData, cb) {
   delete data[json_shops_confs[0].url+'_itemnumber'];
   //data[json_shops_confs[0].url+'_lastupdate'] = new Date().toJSON();
   data[json_shops_confs[0].url+'_lastupdate'] = getDate()+" "+getTime();
-  console.log(data[json_shops_confs[0].url+'_lastupdate']);
+  //console.log(data[json_shops_confs[0].url+'_lastupdate']);
   cb(sku, data);
 }
 

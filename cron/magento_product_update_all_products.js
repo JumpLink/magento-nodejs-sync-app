@@ -11,7 +11,7 @@ var json_shop = require('../json_shop_funcs.js');
 var magento_confs = require('../config/magento_confs.js');
 var magento = require('../magento_funcs');
 var util = require('util');
-var colors = require('colors');
+//var colors = require('colors');
 
 var Log = require('log')
   , fs = require('fs')
@@ -91,23 +91,23 @@ function update_products_with_one_connect() {
                       current_magento.catalog_product.update(sku, magento_attributes, storeView, function(error, result) {
                         if (error) {
                           /*no more try*/
-                          util.error('product update with sku: '+sku.blue+' failed: '.red + util.inspect(error));
+                          util.error('product update with sku: '+sku+' failed: ' + util.inspect(error));
                           log_err.error('product update with sku: '+sku+' failed: ' + util.inspect(error));
                           log_sku.debug(sku);
                           pausecomp(1000);
                         }
                         else {
-                          util.log('product update with sku: '+sku.blue+' successful'.green+', result: '+util.inspect(result));
+                          util.log('product update with sku: '+sku+' successful'+', result: '+util.inspect(result));
                         }
                       });
                     }
                     else {
-                      util.log('product update with sku: '+sku.blue+' successful'.green+', result: '+util.inspect(result));
+                      util.log('product update with sku: '+sku+' successful'+', result: '+util.inspect(result));
                     }
                   });
                 }
                 else {
-                  util.log('product update with sku: '+sku.blue+' successful'.green+', result: '+util.inspect(result));
+                  util.log('product update with sku: '+sku+' successful'+', result: '+util.inspect(result));
                 }
               });
             });
