@@ -18,7 +18,7 @@ function send_mail(send_text) {
 }
 
 var send_text = "Folgende SKUs sollen zwar syncronisiert werden, dies funktioniert aber nicht, was soll'n das?!\nWillst du mich verwirren?! Bitte korrigieren!\n\n";
-var stdout = execSync.stdout('node cron/magento_syncablecheck_all_products.js');
+var stdout = execSync.stdout('node '+__dirname + '/../cron/magento_syncablecheck_all_products.js');
 send_text += stdout;
 send_text += "\n\nLG, dein Server";
 
