@@ -18,7 +18,12 @@ function send_mail(send_text) {
 }
 
 var send_text = "Folgende SKUs sollen zwar syncronisiert werden, dies funktioniert aber nicht, was soll'n das?!\nWillst du mich verwirren?! Bitte korrigieren!\n\n";
-send_text += execSync.stdout('node ./magento_syncablecheck_all_products.js');
+var stdout = execSync.stdout('node cron/magento_syncablecheck_all_products.js');
+send_text += stdout;
 send_text += "\n\nLG, dein Server";
 
-console.log(send_text);
+var count = stdout.match(/\n/g); //Anzahl Zeilen im String
+if(count.length>=2) {
+	//console.log(send_text);
+	send_mail(send_text);
+}
