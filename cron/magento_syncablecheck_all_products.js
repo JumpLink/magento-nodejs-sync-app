@@ -27,7 +27,7 @@ function check_products_syncable(cb) {
   var current_magento = require('../magento')(magento_confs[shop_index]);
   current_magento.init(function(err) {
     current_magento.catalog_product.list(filter, storeView, function(error, result) {
-      for (var i = 6 - 1; i >= 0; i--) {
+      for (var i = result.length - 1; i >= 0; i--) {
         var magento_result = result[i];
         if(magento_result.vwheritage_sync=1) {
           json_product(magento_result.sku, i, function(sku, i, data){
