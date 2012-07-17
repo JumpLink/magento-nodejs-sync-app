@@ -14,6 +14,9 @@ var render_parameter = {
   , filter_shop: 0 //TODO
 };
 
+var config = require('./config/config.js');
+var general_conf = config.open(__dirname + "/config/general.json");
+
 function get_json(uri, cb) {
   fetchUrl(uri, function(error, meta, body){
       //console.log(body.toString());
@@ -109,6 +112,12 @@ function getTime() {
   return curr_hour + ":" + curr_min + " " + a_p;
 }
 
+function roundPrice(x) {
+  var k = (Math.round(x * 100) / 100).toString();
+  k += (k.indexOf('.') == -1)? '.00' : '00';
+  return Number(k.substring(0, k.indexOf('.') + 3));
+}
+
 function getProductDataForMagentoAttributes(sku, rawData, cb) {
   var data = {};
   for (var i = rawData.COLUMNS.length - 1; i >= 0; i--) {
@@ -124,6 +133,10 @@ function getProductDataForMagentoAttributes(sku, rawData, cb) {
   //data[json_shops_confs[0].url+'_lastupdate'] = new Date().toJSON();
   data[json_shops_confs[0].url+'_lastupdate'] = getDate()+" "+getTime();
   //console.log(data[json_shops_confs[0].url+'_lastupdate']);
+  data[json_shops_confs[0].url+'_retailprice'] = roundPrice(Number(data[json_shops_confs[0].url+'_retailprice']) * Number(general_conf.GBP_factor));
+  data[json_shops_confs[0].url+'_costprice'] = roundPrice(Number(data[json_shops_confs[0].url+'_costprice']) * Number(general_conf.GBP_factor));
+  //console.log('umrechnungsfaktor: ');
+  //console.log(Number(general_conf.GBP_factor));
   cb(sku, data);
 }
 

@@ -120,5 +120,5 @@ function update_products_with_one_connect() {
     });
   });
 }
-//update_products_with_each_new_connect();
+
 update_products_with_one_connect();

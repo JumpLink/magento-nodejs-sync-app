@@ -14,6 +14,10 @@
     "range-parser": "latest",
     "iconv": "1.1.2",
     "colors": "latest",
-    "log": "latest"
+    "log": "latest",
+    //"prettyjson": "latest"
+    //"sync": "latest",
+    "emailjs": "latest",
+    "execSync" : "latest"
   }
 }
