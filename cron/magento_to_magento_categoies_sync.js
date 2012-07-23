@@ -56,9 +56,10 @@ function create_categorie(categoryData) {
   //update_magento.init(function(err) {
     update_magento.catalog_category.create(categoryData.parent_id, categoryData, storeView, function(error, result) {
       if(error) {
+        console.log("create_categorie error with category: "+categoryData.category_id+ " "+categoryData.name);
         console.log(error);
         //pausecomp(10000);
-        create_categorie(categoryData);
+        //create_categorie(categoryData);
       }
       else {console.log("categorie created")}
     });
@@ -71,9 +72,10 @@ function update_categorie(categoryData) {
   //update_magento.init(function(err) {
     update_magento.catalog_category.update(categoryData.category_id, categoryData, storeView, function(error, result) {
       if(error) {
+        console.log("update_categorie error with category: "+categoryData.category_id+ " "+categoryData.name);
         console.log(error);
         //pausecomp(10000);
-        update_categorie(categoryData);
+        //update_categorie(categoryData);
       }
       else {console.log("categorie updated")}
     });
@@ -118,14 +120,23 @@ function update_or_create(categoryData) {
 function getCategorie(category_id) {
   base_magento.catalog_category.info(category_id, storeView, attributes, function(error, result) {
 
-    if (error) {console.log(error);}
+    if (error) {
+      console.log("getCategorie error with category_id: "+category_id);
+      console.log(error);
+    }
     else {
       var children = result.children.split(',');
       //pausecomp(10000);
       //console.log(result);
       update_or_create(result);
       for (var i = children.length - 1; i >= 0; i--) {
-        getCategorie(children[i]);
+        //console.log(children[i]);
+        if(children[i] != null && children[i] != "" &&  children[i] != " ")
+          getCategorie(Number(children[i]));
+        else {
+          //console.log('wrong child?!');
+          //console.log(result);
+        }
       }
     }
   });
