@@ -105,16 +105,16 @@ function syncProductFilterSubmitOnClick(rValue, sValue, iValue, url) {
   parent.location = url + url_append;
 }
 /* Funktionen werden ausgeführt bei Click auf CategoryButton */
-function CategoryLevelSubmitOnClick(shop, input) {
-  var url = '/category/level/' + input;
+function CategoryLevelSubmitOnClick(shop, input, base_url) {
+  var url = '/'+base_url+'/category/level/' + input;
   parent.location = setShopUrl(url, shop)
 }
-function CategoryTreeSubmitOnClick(shop, input){
-  var url = '/category/tree/' + input;
+function CategoryTreeSubmitOnClick(shop, input, base_url){
+  var url = '/'+base_url+'/category/tree/' + input;
   parent.location = setShopUrl(url, shop);
 }
-function CategoryProductsSubmitOnClick(shop, input){
-  var url = '/category/products/' + input;;
+function CategoryProductsSubmitOnClick(shop, input, base_url){
+  var url = '/'+base_url+'/category/products/' + input;;
   parent.location = setShopUrl(url, shop);
 }
 /* on client */

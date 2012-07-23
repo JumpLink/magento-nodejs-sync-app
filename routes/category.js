@@ -15,7 +15,7 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
       	if (error) { throw error; }
       	var shop_param = url.setShopUrl('', req.query['shop']);
       	//res.render('category_tree', { title: 'Category Tree', url: "/category/tree", images: result, shop_param: shop_param });
-  		res.render('category_tree', { title: 'Category Tree', url: "/category/tree", parentId: req.params.parent_id, category_of_parentId: result, shop_param: shop_param });
+  		res.render('category_tree', { title: 'Category Tree', url: "/"+magento_conf.url+"/category/tree", parentId: req.params.parent_id, category_of_parentId: result, shop_param: shop_param });
       });
   }
 
@@ -29,7 +29,7 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
       	if (error) { throw error; }
       	var shop_param = url.setShopUrl('', req.query['shop']);
       	//console.log(result);
-  		res.render('category_level', { title: 'Category Level', url: "/category/level", shop_param: shop_param, categories: result });
+  		res.render('category_level', { title: 'Category Level', url: "/"+magento_conf.url+"/category/level", shop_param: shop_param, categories: result });
       }); 
   }
 
@@ -45,7 +45,7 @@ module.exports = function (app, magento, url, magento_confs, sync_shops_confs) {
       magento.catalog.category.assignedProducts(req.params.category_id, store, magento_conf, function(error, result) {
       	if (error) { throw error; }
       	var shop_param = url.setShopUrl('', req.query['shop']);
-  		res.render('category_product_list', { title: 'Product List', url: "/category/products", products: result, categoryId: req.params.category_id, shop_param: shop_param });    	
+  		res.render('category_product_list', { title: 'Product List', url: "/"+magento_conf.url+"/category/products", products: result, categoryId: req.params.category_id, shop_param: shop_param });    	
       });
   }
 

@@ -4,13 +4,13 @@ block content
   h1 What you want to do with the categories?
   ul
     li
-      a(href="/category/level/1", target="_top")
+      a(href="/#{magento_confs[0].url}/category/level/1", target="_top")
         | Retrieve one level of categories by website/store view/parent category
     li
-      a(href="/category/tree/1", target="_top")
+      a(href="/#{magento_confs[0].url}/category/tree/1", target="_top")
         | Retrieve hierarchical tree of categories.
     li
-      a(href="/category/products/1", target="_top")
+      a(href="/#{magento_confs[0].url}/category/products/1", target="_top")
         | Retrieve list of assigned products.
 
   form.form-horizontal(target="_parent", name='filterForm')
@@ -25,6 +25,6 @@ block content
     .form-actions
       .input-append
         input.span2(id="appendedInputButton", size="16", type="number", min="1", value="1")
-        button.btn.btn-primary(type="button", onClick="javascript:CategoryLevelSubmitOnClick($('select option:selected').attr('name'), $('#appendedInputButton').val())") Retrieve level
-        button.btn.btn-primary(type="button", onClick="javascript:CategoryTreeSubmitOnClick($('select option:selected').attr('name'), $('#appendedInputButton').val())") Retrieve tree
-        button.btn.btn-primary(type="button", onClick="javascript:CategoryProductsSubmitOnClick($('select option:selected').attr('name'), $('#appendedInputButton').val())") Retrieve products
+        button.btn.btn-primary(type="button", onClick="javascript:CategoryLevelSubmitOnClick($('select option:selected').attr('name'), $('#appendedInputButton').val(), '#{magento_confs[0].url}')") Retrieve level
+        button.btn.btn-primary(type="button", onClick="javascript:CategoryTreeSubmitOnClick($('select option:selected').attr('name'), $('#appendedInputButton').val(), '#{magento_confs[0].url}')") Retrieve tree
+        button.btn.btn-primary(type="button", onClick="javascript:CategoryProductsSubmitOnClick($('select option:selected').attr('name'), $('#appendedInputButton').val(), '#{magento_confs[0].url}')") Retrieve products
