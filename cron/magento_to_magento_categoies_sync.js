@@ -23,12 +23,16 @@ var storeView = null;
 var website = null;
 var shop_index_base = 0;
 var shop_index_update = 1;
+var start_categorie = 1;
 var attributes = null;
 if (argv.base) {
     shop_index_base = argv.base;
 }
 if (argv.update) {
     shop_index_update = argv.update;
+}
+if (argv.start) {
+    start_categorie = argv.start;
 }
 var base_magento = require('../magento')(magento_confs[shop_index_base]);
 var update_magento = require('../magento')(magento_confs[shop_index_update]);
@@ -89,9 +93,9 @@ function update_categorie(categoryData) {
 
 function update_or_create(categoryData) {
   var categoryData = categoryData;
-  delete categoryData.all_children;
-  delete categoryData.children;
-  delete categoryData.children_count;
+  //delete categoryData.all_children;
+  //delete categoryData.children;
+  //delete categoryData.children_count;
   delete categoryData.updated_at;
   delete categoryData.created_at;
   if(categoryData.default_sort_by == null) {
@@ -132,8 +136,8 @@ function getCategorie(category_id) {
     else {
       var children = result.children.split(',');
       //pausecomp(10000);
-      //console.log(result);
-      update_or_create(result);
+      console.log(result);
+      //update_or_create(result);
       for (var i = children.length - 1; i >= 0; i--) {
         //console.log(children[i]);
         if(children[i] != null && children[i] != "" &&  children[i] != " ")
@@ -155,4 +159,4 @@ function sync_categories(category_id) {
   });
 }
 
-sync_categories(1);
+sync_categories(start_categorie);
