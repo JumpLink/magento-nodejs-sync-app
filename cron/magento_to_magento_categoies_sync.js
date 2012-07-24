@@ -136,8 +136,8 @@ function getCategorie(category_id) {
     else {
       var children = result.children.split(',');
       //pausecomp(10000);
-      console.log(result);
-      //update_or_create(result);
+      //console.log(result);
+      update_or_create(result);
       for (var i = children.length - 1; i >= 0; i--) {
         //console.log(children[i]);
         if(children[i] != null && children[i] != "" &&  children[i] != " ")
