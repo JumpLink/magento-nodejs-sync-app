@@ -9,6 +9,7 @@ var url = require('../public/javascripts/url_funcs.js');
 var magento_confs = require('../config/magento_confs.js');
 var magento = require('../magento_funcs');
 var util = require('util');
+var argv = require('optimist').argv;
 //var colors = require('colors');
 
 var Log = require('log')
@@ -23,10 +24,14 @@ var website = null;
 var shop_index_base = 0;
 var shop_index_update = 1;
 var attributes = null;
+if (argv.base) {
+    shop_index_base = argv.base;
+}
+if (argv.update) {
+    shop_index_update = argv.update;
+}
 var base_magento = require('../magento')(magento_confs[shop_index_base]);
 var update_magento = require('../magento')(magento_confs[shop_index_update]);
-//var base_magento_root_id = 3;
-//var update_magento_root_id = 2;
 
 function pausecomp(ms) {
   ms += new Date().getTime();

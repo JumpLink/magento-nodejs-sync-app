@@ -16,6 +16,7 @@
     "colors": "latest",
     "log": "latest",
     "emailjs": "latest",
-    "execSync" : "latest"
+    "execSync" : "latest",
+    "optimist" : "latest"
   }
 }
