@@ -16,9 +16,9 @@ var fs = require('fs');
 var log_path = "log";
 
 //create writestrems for logs
-var unexpected_end_log = fs.createWriteStream(log_path+"/unexpected_end.log", { flags: "a", encoding: "encoding", mode: 0666});
-var not_exists_log = fs.createWriteStream(log_path+"/not_exists.log", { flags: "a", encoding: "encoding", mode: 0666 });
-var sql_log = fs.createWriteStream(log_path+"/sql.log", { flags: "a", encoding: "encoding", mode: 0666 });
+var unexpected_end_log = fs.createWriteStream(__dirname+"/../"+log_path+"/unexpected_end.log", { flags: "a", encoding: "encoding", mode: 0666});
+var not_exists_log = fs.createWriteStream(__dirname+"/../"+log_path+"/not_exists.log", { flags: "a", encoding: "encoding", mode: 0666 });
+var sql_log = fs.createWriteStream(__dirname+"/../"+log_path+"/sql.log", { flags: "a", encoding: "encoding", mode: 0666 });
 
 var storeView = null;
 var website = null;
@@ -59,9 +59,9 @@ function pausecomp(ms) {
 
 //remove content of file / create new file
 function reset_logs() {
-  fs.createWriteStream(log_path+"/unexpected_end.log", { flags: "w" }).write("");
-  fs.createWriteStream(log_path+"/not_exists.log", { flags: "w" }).write("");
-  fs.createWriteStream(log_path+"/sql.log", { flags: "w" }).write("");
+  fs.createWriteStream(__dirname+"/../"+log_path+"/unexpected_end.log", { flags: "w" }).write("");
+  fs.createWriteStream(__dirname+"/../"+log_path+"/not_exists.log", { flags: "w" }).write("");
+  fs.createWriteStream(__dirname+"/../"+log_path+"/sql.log", { flags: "w" }).write("");
 }
 
 function saveFileToArray(filename, cb) {
