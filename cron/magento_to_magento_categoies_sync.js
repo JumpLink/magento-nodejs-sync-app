@@ -170,6 +170,10 @@ function update_or_create(categoryData) {
   delete categoryData.children_count;
   delete categoryData.updated_at;
   delete categoryData.created_at;
+  delete categoryData.custom_design;
+  delete categoryData.custom_design_from;
+  delete categoryData.custom_design_to;
+  delete categoryData.level;
   if(categoryData.default_sort_by == null) {
     categoryData.available_sort_by = ['name'];
     categoryData.default_sort_by = 'name';
