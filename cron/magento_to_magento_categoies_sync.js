@@ -280,7 +280,7 @@ function getCategoryFromNotExistsLog() {
 function start(category_id) {
   base_magento.init(function(err) {
     update_magento.init(function(err) {
-      for (var i = 0; i >= loops; i++) {
+      for (var i = 0; i <= loops; i++) {
         if (argv.not_exists) {
           getCategoryFromNotExistsLog();
         } else {
