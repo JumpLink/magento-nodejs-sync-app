@@ -93,9 +93,9 @@ function update_categorie(categoryData) {
 
 function update_or_create(categoryData) {
   var categoryData = categoryData;
-  //delete categoryData.all_children;
-  //delete categoryData.children;
-  //delete categoryData.children_count;
+  delete categoryData.all_children;
+  delete categoryData.children;
+  delete categoryData.children_count;
   delete categoryData.updated_at;
   delete categoryData.created_at;
   if(categoryData.default_sort_by == null) {
