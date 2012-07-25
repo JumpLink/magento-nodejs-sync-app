@@ -30,7 +30,6 @@ var attributes = null;
 var replace = 3
 //with this categorie_id
 var replacer = 2;
-var loops = 10;
 if (argv.base) {
     shop_index_base = argv.base;
 }
@@ -45,9 +44,6 @@ if (argv.replace) {
 }
 if (argv.replacer) {
     replacer = argv.replacer;
-}
-if (argv.loops) {
-    loops = argv.loops;
 }
 var base_magento = require('../magento')(magento_confs[shop_index_base]);
 var update_magento = require('../magento')(magento_confs[shop_index_update]);
@@ -106,7 +102,6 @@ function print_help(){
   console.log("--start [Number]");
   console.log("--replace [Number]");
   console.log("--replacer [Number]");
-  console.log("--loops [Number]");
   console.log("--not_exists");
 }
 
@@ -214,6 +209,10 @@ function getCategory(category_id) {
         result.parent_id = replacer;
 
       var children = result.children.split(',');
+      // for (var i = 0; i < children.length; i++) {
+      //   if(children[i] == replace)
+      //     children[i] = replacer;
+      // };
       //pausecomp(10000);
       //console.log(result);
       update_or_create(result);
@@ -253,41 +252,17 @@ function getCategoryFromNotExistsLog() {
       });
     }
   });
-  // base_magento.catalog_category.info(category_id, storeView, attributes, function(error, result) {
-  //   if (error) {
-  //     console.log("getCategorie error with category_id: "+category_id);
-  //     console.log(error);
-  //   }
-  //   else {
-  //     if(result.category_id == replace)
-  //       result.category_id = replacer;
-  //     if(result.parent_id == replace)
-  //       result.parent_id = replacer;
-
-  //     var children = result.children.split(',');
-  //     //pausecomp(10000);
-  //     //console.log(result);
-  //     update_or_create(result);
-  //     for (var i = children.length - 1; i >= 0; i--) {
-  //       //console.log(children[i]);
-  //       if(children[i] != null && children[i] != "" &&  children[i] != " ")
-  //         getCategorie(Number(children[i]));
-  //     }
-  //   }
-  // });
 }
 
 function start(category_id) {
   base_magento.init(function(err) {
     update_magento.init(function(err) {
-      for (var i = 0; i <= loops; i++) {
-        if (argv.not_exists) {
-          getCategoryFromNotExistsLog();
-        } else {
-          reset_logs();
-          getCategory(category_id);
-        }
-      };
+      if (argv.not_exists) {
+        getCategoryFromNotExistsLog();
+      } else {
+        reset_logs();
+        getCategory(category_id);
+      }
     });
   });
 }
