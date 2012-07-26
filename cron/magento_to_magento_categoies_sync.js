@@ -123,8 +123,8 @@ function error_handler(error, function_name, category_id, category_data) {
   } else if (error.toString().indexOf("SQLSTATE") != -1) {
     sql_log.write(category_id+"\n");
   }
-  console.log(error);
-  console.log(category_data);
+  //console.log(error);
+  //console.log(category_data);
 }
 
 function delete_categorie(category_id) {
@@ -233,18 +233,23 @@ function update_or_create_or_move(categoryData) {
   var categoryData = categoryData;
     update_magento.catalog_category.info(Number(categoryData.category_id), storeView, attributes, function(error, result) {
       if(error) {
-        console.log("create");
-        create_category(categoryData);
-      }
-      else {
-        if(result && result.category_id != null && result.parent_id != null) {
-          //console.log("update");
-          //console.log(result);
-          update_or_move(categoryData, result)
-        }
-        else {
+        if(result.category_id > 1) {
           console.log("create");
           create_category(categoryData);
+        }
+      }
+      else {
+        if(result== null || typeof(result) === "undefined") {
+          if(result.category_id > 1) {
+            console.log("create");
+            create_category(categoryData);
+          }
+        }
+        else {
+          //console.log("update");
+          //console.log(result);
+          if(result.category_id > 1)
+            update_or_move(categoryData, result);
         }
       }
     });
