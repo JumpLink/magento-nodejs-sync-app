@@ -27,9 +27,9 @@ var shop_index_update = 1;
 var start_categorie = 1;
 var attributes = null;
 //replace categorie_id
-var replace = 3
+var replace = 0
 //with this categorie_id
-var replacer = 2;
+var replacer = 0;
 if (argv.base) {
     shop_index_base = argv.base;
 }
@@ -102,34 +102,34 @@ function print_help(){
   console.log("--start [Number]");
   console.log("--replace [Number]");
   console.log("--replacer [Number]");
-  console.log("--not_exists");
+  console.log("--not_exists Try to resync category_ids written in not_exists.log");
+  console.log("--sql: Try to resync category_ids written in sql.log");
 }
 
-function error_handler(error, function_name, category_id_or_data) {
+function error_handler(error, function_name, category_id, category_data) {
   switch (function_name) {
     case "delete_categorie":
-      console.log(function_name+" error with category: "+category_id_or_data);
-    break;
-    case "create_categorie":
-      console.log(function_name+" error with category: "+category_id_or_data.category_id+ " "+category_id_or_data.name);
-      if(error.toString().indexOf("Category not exists") != -1) {
-        not_exists_log.write(category_id_or_data.category_id+"\n")
-      } else if (error.toString().indexOf("Unexpected end") != -1) {
-        unexpected_end_log.write(category_id_or_data.category_id+"\n");
-      } else if (error.toString().indexOf("SQLSTATE") != -1) {
-        sql_log.write(error.toString()+"\n");
-      }
-    break;
-    case "update_categorie":
-      console.log(function_name+" error with category: "+category_id_or_data.category_id+ " "+category_id_or_data.name);
+      console.log(function_name+" error with category: "+Number(category_id));
+    case "create_category":
+    case "update_category":
+    case "move_category":
+      console.log(function_name+" error with category: "+Number(category_id)+ " "+category_data.name);
     break;
   }
-  
+  if(error.toString().indexOf("Category not exists") != -1) {
+    not_exists_log.write(category_id+"\n")
+  } else if (error.toString().indexOf("Unexpected end") != -1) {
+    unexpected_end_log.write(category_id+"\n");
+  } else if (error.toString().indexOf("SQLSTATE") != -1) {
+    sql_log.write(category_id+"\n");
+  }
+  console.log(error);
+  console.log(category_data);
 }
 
 function delete_categorie(category_id) {
   update_magento.init(function(err) {
-    update_magento.catalog_category.delete(category_id, function(error, result) {
+    update_magento.catalog_category.delete(Number(category_id), function(error, result) {
       if(error) {
         error_handler(error, "delete_categorie", category_id);
       }
@@ -140,31 +140,55 @@ function delete_categorie(category_id) {
   });
 }
 
-function create_categorie(categoryData) {
+function create_category(categoryData) {
   if(categoryData.default_sort_by == null) {
     categoryData.available_sort_by = ['name'];
     categoryData.default_sort_by = 'name';
   }
-    update_magento.catalog_category.create(categoryData.parent_id, categoryData, storeView, function(error, result) {
-      if(error) {
-        error_handler(error, "create_categorie", categoryData);
-      }
-      else {console.log("categorie created "+categoryData.category_id+" "+categoryData.name)}
-    });
+  var parent_id = Number(categoryData.parent_id);
+  // delete categoryData.parent_id;
+  update_magento.catalog_category.create(parent_id, categoryData, storeView, function(error, result) {
+    if(error) {
+      error_handler(error, "create_category", categoryData.category_id, categoryData);
+    }
+    else {console.log("categorie created "+categoryData.category_id+" "+categoryData.name)}
+  });
 }
 
-function update_categorie(categoryData) {
-
-    update_magento.catalog_category.update(categoryData.category_id, categoryData, storeView, function(error, result) {
-      if(error) {
-        error_handler(error, "update_categorie", categoryData);
-      }
-      else {console.log("categorie updated "+categoryData.category_id+" "+categoryData.name)}
-    });
+function update_category(categoryData) {
+  var category_id = Number(categoryData.category_id);
+  // delete categoryData.category_id;
+  update_magento.catalog_category.update(category_id, categoryData, storeView, function(error, result) {
+    if(error) {
+      error_handler(error, "update_category", category_id, categoryData);
+    }
+    else {console.log("categorie updated "+category_id+" "+categoryData.name +" "+result)}
+  });
 }
 
-function update_or_create(categoryData) {
-  var categoryData = categoryData;
+function move_category(categoryData) {
+  var category_id = Number(categoryData.category_id);
+  var new_parent_id = Number(categoryData.parent_id);
+  // delete categoryData.category_id;
+  // delete categoryData.parent_id;
+  var afterId = null;
+  update_magento.catalog_category.move(category_id, new_parent_id, afterId, function(error, result) {
+    if(error) {
+      error_handler(error, "move_category", category_id, categoryData);
+    }
+    else {console.log("categorie moved "+category_id+" "+categoryData.name +" "+result)}
+  });
+}
+
+function update_or_move(basicCategoryData, currentUpdateCategoryData) {
+  if (basicCategoryData.parent_id != currentUpdateCategoryData.parent_id)
+    move_category(basicCategoryData);
+  else
+    update_category(basicCategoryData);
+}
+
+
+function customize_Attributes(categoryData, cb) {
   delete categoryData.all_children;
   delete categoryData.children;
   delete categoryData.children_count;
@@ -173,64 +197,82 @@ function update_or_create(categoryData) {
   delete categoryData.custom_design;
   delete categoryData.custom_design_from;
   delete categoryData.custom_design_to;
+  delete categoryData.custom_layout_update;
   delete categoryData.level;
+  delete categoryData.path;
+
+  categoryData.parent_id = categoryData.parent_id.toString();
+  // var replacer_string = new RegExp("´","g");
+  // categoryData.name = categoryData.name.replace(replacer_string,"");
+
   if(categoryData.default_sort_by == null) {
-    categoryData.available_sort_by = ['name'];
+    categoryData.available_sort_by = 'name';
     categoryData.default_sort_by = 'name';
   }
-  if (categoryData.is_active == null) {
-    categoryData.is_active = 0;
+  if(categoryData.category_id == replace)
+    categoryData.category_id = replacer.toString();
+  if(categoryData.parent_id == replace)
+    categoryData.parent_id = replacer.toString();
+  for (attr in categoryData) {
+    if((typeof(categoryData[attr])=="undefined") || categoryData[attr] == "" || categoryData[attr] == null) {
+      //console.log("delete attribute "+attr+": "+categoryData[attr]);
+      delete categoryData[attr];
+    } else {
+      //categoryData[attr] = categoryData[attr].toString();
+    }
   }
-    update_magento.catalog_category.info(categoryData.category_id, storeView, attributes, function(error, result) {
+  //console.log(categoryData);
+  if (typeof(categoryData.is_active)==="undefined") {
+    categoryData.is_active = '0';
+  }
+
+  cb(categoryData);
+}
+
+function update_or_create_or_move(categoryData) {
+  var categoryData = categoryData;
+    update_magento.catalog_category.info(Number(categoryData.category_id), storeView, attributes, function(error, result) {
       if(error) {
         console.log("create");
-        create_categorie(categoryData);
+        create_category(categoryData);
       }
       else {
-        if(typeof(result)!== "undefined" && result != null) {
-          console.log("update");
+        if(result && result.category_id != null && result.parent_id != null) {
+          //console.log("update");
           //console.log(result);
-          update_categorie(categoryData);
+          update_or_move(categoryData, result)
         }
         else {
           console.log("create");
-          create_categorie(categoryData);
+          create_category(categoryData);
         }
       }
     });
 }
 
 function getCategory(category_id) {
-  base_magento.catalog_category.info(category_id, storeView, attributes, function(error, result) {
+  base_magento.catalog_category.info(Number(category_id), storeView, attributes, function(error, result) {
     if (error) {
-      console.log("getCategory error with category_id: "+category_id);
+      console.log("getCategory error with category_id: "+Number(category_id));
       console.log(error);
     }
     else {
-      if(result.category_id == replace)
-        result.category_id = replacer;
-      if(result.parent_id == replace)
-        result.parent_id = replacer;
-
       var children = result.children.split(',');
-      // for (var i = 0; i < children.length; i++) {
-      //   if(children[i] == replace)
-      //     children[i] = replacer;
-      // };
-      //pausecomp(10000);
-      //console.log(result);
-      update_or_create(result);
-      for (var i = children.length - 1; i >= 0; i--) {
-        //console.log(children[i]);
-        if(children[i] != null && children[i] != "" &&  children[i] != " ")
-          getCategory(Number(children[i]));
+      customize_Attributes(result, function(result){
+        //  console.log(result);
+        update_or_create_or_move(result);
+        for (var i = children.length - 1; i >= 0; i--) {
+          //console.log(children[i]);
+          if(children[i] != null && children[i] != "" &&  children[i] != " ")
+            getCategory(Number(children[i]));
       }
+      });
     }
   });
 }
 
-function getCategoryFromNotExistsLog() {
-  saveFileToArray(log_path+"/not_exists.log", function(array) {
+function getCategoryFromLog(log_filename) {
+  saveFileToArray(log_path+"/"+log_filename, function(array) {
     for (var i = array.length - 1; i >= 0; i--) {
       base_magento.catalog_category.info(array[i], storeView, attributes, function(error, result) {
         if (error) {
@@ -238,20 +280,11 @@ function getCategoryFromNotExistsLog() {
           console.log(error);
         } 
         else {
-          if(result.category_id == replace) {
-            result.category_id = replacer;
-            console.log("replaced CategoryID"+replace);
-          }
-            
-          if(result.parent_id == replace) {
-            result.parent_id = replacer;
-            console.log("replaced parent_id "+replace);
-          }
+          result = customize_Attributes(result);
 
           var children = result.children.split(',');
-          //pausecomp(10000);
           //console.log(result);
-          update_or_create(result);
+          update_or_create_or_move(result);
         }
       });
     }
@@ -262,10 +295,13 @@ function start(category_id) {
   base_magento.init(function(err) {
     update_magento.init(function(err) {
       if (argv.not_exists) {
-        getCategoryFromNotExistsLog();
-      } else {
+        getCategoryFromLog("not_exists.log");
+      } else if(argv.sql) {
+        getCategoryFromLog("sql.log");
+      }
+       else {
         reset_logs();
-        getCategory(category_id);
+        getCategory(Number(category_id));
       }
     });
   });
