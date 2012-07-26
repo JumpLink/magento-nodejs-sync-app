@@ -233,14 +233,14 @@ function update_or_create_or_move(categoryData) {
   var categoryData = categoryData;
     update_magento.catalog_category.info(Number(categoryData.category_id), storeView, attributes, function(error, result) {
       if(error) {
-        if(result.category_id > 1) {
+        if(categoryData.category_id > 1) {
           console.log("create");
           create_category(categoryData);
         }
       }
       else {
-        if(result== null || typeof(result) === "undefined") {
-          if(result.category_id > 1) {
+        if(result==null || typeof(result) === "undefined") {
+          if(categoryData.category_id > 1) {
             console.log("create");
             create_category(categoryData);
           }
@@ -248,7 +248,7 @@ function update_or_create_or_move(categoryData) {
         else {
           //console.log("update");
           //console.log(result);
-          if(result.category_id > 1)
+          if(categoryData.category_id > 1)
             update_or_move(categoryData, result);
         }
       }
